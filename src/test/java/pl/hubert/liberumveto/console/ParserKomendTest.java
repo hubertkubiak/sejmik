@@ -32,6 +32,7 @@ class ParserKomendTest {
     @Test
     void rozpoznajeStatystyki() {
         assertThat(parser.parsuj("statystyki")).isEqualTo(new Komenda.Statystyki());
+        assertThat(parser.parsuj("zapisz")).isEqualTo(new Komenda.Zapisz());
     }
 
     @Test

@@ -19,6 +19,7 @@ public class ParserKomend {
             case "poslowie", "p" -> bezArgumentow(slowa, new Komenda.Poslowie());
             case "statystyki", "s" -> bezArgumentow(slowa, new Komenda.Statystyki());
             case "glosuj", "g" -> bezArgumentow(slowa, new Komenda.Glosuj());
+            case "zapisz" -> bezArgumentow(slowa, new Komenda.Zapisz());
             case "pomoc", "help", "?" -> bezArgumentow(slowa, new Komenda.Pomoc());
             case "wyjdz", "koniec" -> bezArgumentow(slowa, new Komenda.Wyjdz());
             case "" -> throw new NieprawidlowyWyborException("Wpisz komendę (pomoc pokaże listę)");

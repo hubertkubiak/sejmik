@@ -22,6 +22,7 @@
         <main.class>pl.hubert.liberumveto.console.Main</main.class>
 
         <!-- Wersje zależności w jednym miejscu -->
+        <jackson.version>2.23.0</jackson.version>
         <junit.version>5.14.4</junit.version>
         <assertj.version>3.27.7</assertj.version>
 
@@ -29,6 +30,7 @@
         <compiler.plugin.version>3.16.0</compiler.plugin.version>
         <surefire.plugin.version>3.6.1</surefire.plugin.version>
         <jar.plugin.version>3.5.1</jar.plugin.version>
+        <shade.plugin.version>3.6.2</shade.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -45,6 +47,13 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- scope domyślny (compile): biblioteka potrzebna w czasie działania aplikacji -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
         <!-- scope "test": biblioteki dostępne tylko w src/test, nie trafiają do aplikacji -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -89,6 +98,38 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <!-- "Fat jar": wkłada do jednego jara nasz kod i wszystkie zależności (Jackson),
+                     żeby "java -jar" działało bez ręcznego składania classpath -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${shade.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>liberum-veto</finalName>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <!-- podpisy i deskryptory modułów z zależności nie pasują do sklejonego jara -->
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>META-INF/versions/*/module-info.class</exclude>
+                                        <exclude>module-info.class</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

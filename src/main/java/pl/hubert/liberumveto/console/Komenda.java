@@ -9,7 +9,7 @@ package pl.hubert.liberumveto.console;
  */
 public sealed interface Komenda
         permits Komenda.Przekup, Komenda.Poslowie, Komenda.Statystyki, Komenda.Glosuj, Komenda.Pomoc,
-                Komenda.Wyjdz {
+                Komenda.Zapisz, Komenda.Wyjdz {
 
     /** {@code przekup <id> <kwota>} */
     record Przekup(int poselId, int kwota) implements Komenda {
@@ -29,6 +29,10 @@ public sealed interface Komenda
 
     /** {@code pomoc}: lista komend. */
     record Pomoc() implements Komenda {
+    }
+
+    /** {@code zapisz}: zapis stanu gry do pliku. */
+    record Zapisz() implements Komenda {
     }
 
     /** {@code wyjdz}: przerwanie gry. */

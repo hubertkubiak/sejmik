@@ -7,8 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import pl.hubert.liberumveto.console.zapis.ZapisGry;
 import pl.hubert.liberumveto.domain.gra.Gra;
+import pl.hubert.liberumveto.domain.gra.StanGry;
 import pl.hubert.liberumveto.domain.gra.Statystyki;
 import pl.hubert.liberumveto.domain.gra.WynikSejmu;
 import pl.hubert.liberumveto.domain.gra.ZmianaPoparcia;
@@ -17,6 +21,7 @@ import pl.hubert.liberumveto.domain.model.Glos;
 import pl.hubert.liberumveto.domain.model.Posel;
 import pl.hubert.liberumveto.domain.model.Ustawa;
 import pl.hubert.liberumveto.domain.sejm.WynikGlosowania;
+import pl.hubert.liberumveto.domain.wyjatki.BladZapisuGryException;
 import pl.hubert.liberumveto.domain.wyjatki.NieprawidlowyWyborException;
 import pl.hubert.liberumveto.domain.wyjatki.NiewystarczajacyBudzetException;
 
@@ -32,24 +37,38 @@ public class KonsolaUI {
               posłowie  (p)          tabela posłów z aktualnym poparciem
               statystyki (s)         frakcje, najbardziej przekupni, zagrożeni vetem
               głosuj    (g)          zakończ przekupstwa i przeprowadź głosowanie
+              zapisz                 zapisz grę (zapis dzieje się też po każdym sejmie)
               pomoc     (?)          ta lista
               wyjdź                  przerwij grę
             Progi: poparcie >= 50 to głos ZA, poniżej 15 grozi VETO.""";
 
     private final Scanner wejscie;
     private final PrintStream wyjscie;
-    private final Gra gra;
+    private final ZapisGry zapis;
     private final ParserKomend parser = new ParserKomend();
+    private Gra gra;
 
-    public KonsolaUI(Scanner wejscie, PrintStream wyjscie, Gra gra) {
+    public KonsolaUI(Scanner wejscie, PrintStream wyjscie, ZapisGry zapis) {
         this.wejscie = wejscie;
         this.wyjscie = wyjscie;
-        this.gra = gra;
+        this.zapis = zapis;
     }
 
-    /** Główna pętla gry. */
-    public void uruchom() {
+    /**
+     * Główna pętla gry. Sposób utworzenia gry dostajemy jako funkcje, więc konsola nie musi
+     * wiedzieć, skąd brać posłów, katalog ustaw czy generator losowy.
+     *
+     * @param nowaGra tworzy nową grę
+     * @param wznow   tworzy grę z wczytanego stanu
+     */
+    public void uruchom(Supplier<Gra> nowaGra, Function<StanGry, Gra> wznow) {
         wyjscie.println("Witaj, Najjaśniejszy Panie! Przeforsuj 3 z 5 ustaw, zanim magnaci zerwą sejmy.");
+        Optional<Gra> start = wybierzStart(nowaGra, wznow);
+        if (start.isEmpty()) {
+            wyjscie.println("Bywaj, Miłościwy Panie!");
+            return;
+        }
+        gra = start.get();
         wyjscie.println("Wpisz pomoc, aby zobaczyć komendy.");
         while (!gra.czyKoniec()) {
             if (!rozegrajSejm()) {
@@ -58,6 +77,36 @@ public class KonsolaUI {
             }
         }
         pokazKoniecGry();
+    }
+
+    /** F1: nowa gra albo wczytanie zapisu, jeśli istnieje. */
+    private Optional<Gra> wybierzStart(Supplier<Gra> nowaGra, Function<StanGry, Gra> wznow) {
+        if (!zapis.istnieje()) {
+            return Optional.of(nowaGra.get());
+        }
+        while (true) {
+            wyjscie.println("Znaleziono zapis gry. 1) Wczytaj zapis  2) Nowa gra");
+            Optional<String> linia = czytajLinie();
+            if (linia.isEmpty()) {
+                return Optional.empty();
+            }
+            switch (linia.get().strip()) {
+                case "1" -> {
+                    try {
+                        StanGry stan = zapis.wczytaj();
+                        wyjscie.printf("Wczytano grę (sejm %d/%d).%n", stan.numerSejmu(), Gra.LICZBA_SEJMOW);
+                        return Optional.of(wznow.apply(stan));
+                    } catch (BladZapisuGryException e) {
+                        wyjscie.println("! " + e.getMessage() + ". Zaczynamy nową grę.");
+                        return Optional.of(nowaGra.get());
+                    }
+                }
+                case "2" -> {
+                    return Optional.of(nowaGra.get());
+                }
+                default -> wyjscie.println("! Wpisz 1 albo 2");
+            }
+        }
     }
 
     /** @return false, jeśli gracz chce wyjść */
@@ -73,7 +122,7 @@ public class KonsolaUI {
         wyjscie.println("Obrady nad ustawą: " + ustawa.tytul());
 
         while (true) {
-            wyjscie.println("Komenda (przekup <id> <kwota> | posłowie | statystyki | głosuj | pomoc):");
+            wyjscie.println("Komenda (przekup <id> <kwota> | posłowie | statystyki | głosuj | zapisz | pomoc):");
             Optional<String> linia = czytajLinie();
             if (linia.isEmpty()) {
                 return false;
@@ -85,6 +134,7 @@ public class KonsolaUI {
                     case Komenda.Przekup(int poselId, int kwota) -> przekup(poselId, kwota);
                     case Komenda.Poslowie() -> pokazPoslow(ustawa);
                     case Komenda.Statystyki() -> pokazStatystyki(ustawa);
+                    case Komenda.Zapisz() -> zapisz();
                     case Komenda.Pomoc() -> wyjscie.println(POMOC);
                     case Komenda.Glosuj() -> {
                         glosuj();
@@ -185,6 +235,17 @@ public class KonsolaUI {
         wyjscie.printf("ZA: %d | PRZECIW: %d | VETO: %d%n",
                 wynik.glosy(Glos.ZA), wynik.glosy(Glos.PRZECIW), wynik.glosy(Glos.VETO));
         wyjscie.println(opisWyniku(wynik));
+        zapisz(); // F8: autozapis po każdej turze
+    }
+
+    private void zapisz() {
+        try {
+            zapis.zapisz(gra.stan());
+            wyjscie.println("(gra zapisana w " + zapis.plik() + ")");
+        } catch (BladZapisuGryException e) {
+            // błąd zapisu nie powinien kończyć gry; informujemy i gramy dalej
+            wyjscie.println("! " + e.getMessage() + ": " + e.getCause().getMessage());
+        }
     }
 
     private static String opisWyniku(WynikGlosowania wynik) {
