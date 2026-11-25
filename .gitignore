@@ -1,0 +1,17 @@
+# Maven
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Zapis gry tworzony w czasie rozgrywki
+save.json
+
+# System
+.DS_Store
+Thumbs.db
