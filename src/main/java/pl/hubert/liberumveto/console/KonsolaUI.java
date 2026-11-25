@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import pl.hubert.liberumveto.domain.gra.Gra;
+import pl.hubert.liberumveto.domain.gra.Statystyki;
 import pl.hubert.liberumveto.domain.gra.WynikSejmu;
 import pl.hubert.liberumveto.domain.gra.ZmianaPoparcia;
 import pl.hubert.liberumveto.domain.model.Frakcja;
@@ -29,6 +30,7 @@ public class KonsolaUI {
             Dostępne komendy:
               przekup <id> <kwota>   przekup posła (podnosi jego poparcie dla ustawy)
               posłowie  (p)          tabela posłów z aktualnym poparciem
+              statystyki (s)         frakcje, najbardziej przekupni, zagrożeni vetem
               głosuj    (g)          zakończ przekupstwa i przeprowadź głosowanie
               pomoc     (?)          ta lista
               wyjdź                  przerwij grę
@@ -71,7 +73,7 @@ public class KonsolaUI {
         wyjscie.println("Obrady nad ustawą: " + ustawa.tytul());
 
         while (true) {
-            wyjscie.println("Komenda (przekup <id> <kwota> | posłowie | głosuj | pomoc):");
+            wyjscie.println("Komenda (przekup <id> <kwota> | posłowie | statystyki | głosuj | pomoc):");
             Optional<String> linia = czytajLinie();
             if (linia.isEmpty()) {
                 return false;
@@ -82,6 +84,7 @@ public class KonsolaUI {
                 switch (komenda) {
                     case Komenda.Przekup(int poselId, int kwota) -> przekup(poselId, kwota);
                     case Komenda.Poslowie() -> pokazPoslow(ustawa);
+                    case Komenda.Statystyki() -> pokazStatystyki(ustawa);
                     case Komenda.Pomoc() -> wyjscie.println(POMOC);
                     case Komenda.Glosuj() -> {
                         glosuj();
@@ -143,6 +146,26 @@ public class KonsolaUI {
                             posel.id(), posel.pelneImie(), posel.frakcja().nazwa(),
                             posel.lojalnoscWobecKrola(), posel.przekupnosc(), poparcie, opisGlosu(poparcie));
                 });
+    }
+
+    private void pokazStatystyki(Ustawa ustawa) {
+        var statystyki = new Statystyki(gra.stan().poslowie());
+        Map<Frakcja, Long> liczebnosc = statystyki.liczebnoscFrakcji();
+
+        wyjscie.println("Średnia lojalność wobec Króla:");
+        statystyki.sredniaLojalnoscPerFrakcja().forEach((frakcja, srednia) ->
+                wyjscie.printf("  %-11s %5.1f  (posłów: %d)%n", frakcja.nazwa(), srednia, liczebnosc.get(frakcja)));
+
+        wyjscie.printf("Średnie poparcie dla ustawy: %.1f%n", statystyki.sredniePoparcie(ustawa));
+
+        wyjscie.println("Top 3 najbardziej przekupnych:");
+        statystyki.najbardziejPrzekupni(3).forEach(posel ->
+                wyjscie.printf("  [%d] %s (%.2f)%n", posel.id(), posel.pelneImie(), posel.przekupnosc()));
+
+        List<Posel> zagrozeni = statystyki.zagrozeniVetem(ustawa);
+        wyjscie.printf("Zagrożeni vetem (%d):%n", zagrozeni.size());
+        zagrozeni.forEach(posel ->
+                wyjscie.printf("  [%d] %s: poparcie %d%n", posel.id(), posel.pelneImie(), posel.obliczPoparcie(ustawa)));
     }
 
     private static String opisGlosu(int poparcie) {

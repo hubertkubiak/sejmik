@@ -8,7 +8,8 @@ package pl.hubert.liberumveto.console;
  * nowej komendy bez jej obsłużenia kończy się błędem kompilacji.
  */
 public sealed interface Komenda
-        permits Komenda.Przekup, Komenda.Poslowie, Komenda.Glosuj, Komenda.Pomoc, Komenda.Wyjdz {
+        permits Komenda.Przekup, Komenda.Poslowie, Komenda.Statystyki, Komenda.Glosuj, Komenda.Pomoc,
+                Komenda.Wyjdz {
 
     /** {@code przekup <id> <kwota>} */
     record Przekup(int poselId, int kwota) implements Komenda {
@@ -16,6 +17,10 @@ public sealed interface Komenda
 
     /** {@code poslowie}: tabela posłów z aktualnym poparciem. */
     record Poslowie() implements Komenda {
+    }
+
+    /** {@code statystyki}: frakcje, najbardziej przekupni i zagrożeni vetem. */
+    record Statystyki() implements Komenda {
     }
 
     /** {@code glosuj}: koniec przekupstw, sejm głosuje. */

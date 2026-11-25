@@ -47,6 +47,7 @@ class KonsolaUITest {
                 przekup 1 100000
                 przekup 1 10
                 posłowie
+                statystyki
                 pomoc
                 wyjdź
                 """);
@@ -59,6 +60,7 @@ class KonsolaUITest {
                 .contains("! Niewystarczający budżet")
                 .contains("Jan Zamoyski h. Jelita: poparcie")
                 .contains("Przewidywany głos")
+                .contains("Top 3 najbardziej przekupnych", "Zagrożeni vetem")
                 .contains("Dostępne komendy")
                 .contains("Gra przerwana")
                 .doesNotContain("KONIEC GRY");

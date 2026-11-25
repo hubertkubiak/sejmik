@@ -17,6 +17,7 @@ public class ParserKomend {
         return switch (nazwa) {
             case "przekup" -> parsujPrzekup(slowa);
             case "poslowie", "p" -> bezArgumentow(slowa, new Komenda.Poslowie());
+            case "statystyki", "s" -> bezArgumentow(slowa, new Komenda.Statystyki());
             case "glosuj", "g" -> bezArgumentow(slowa, new Komenda.Glosuj());
             case "pomoc", "help", "?" -> bezArgumentow(slowa, new Komenda.Pomoc());
             case "wyjdz", "koniec" -> bezArgumentow(slowa, new Komenda.Wyjdz());

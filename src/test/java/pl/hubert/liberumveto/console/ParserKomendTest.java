@@ -30,6 +30,11 @@ class ParserKomendTest {
     }
 
     @Test
+    void rozpoznajeStatystyki() {
+        assertThat(parser.parsuj("statystyki")).isEqualTo(new Komenda.Statystyki());
+    }
+
+    @Test
     void rozpoznajePomocIWyjscie() {
         assertThat(parser.parsuj("pomoc")).isEqualTo(new Komenda.Pomoc());
         assertThat(parser.parsuj("wyjdź")).isEqualTo(new Komenda.Wyjdz());
