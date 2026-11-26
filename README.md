@@ -1,6 +1,6 @@
 # Sejmik 🏛️
 
-> *„Nie pozwalam!”* Turowa gra o sejmach Rzeczypospolitej: jako Król próbujesz przeforsować ustawy, a magnaci przekupują posłów, żeby jednym vetem zerwać obrady. Do zagrania w konsoli albo w przeglądarce (Angular + Spring Boot).
+> Turowa gra o sejmach Rzeczypospolitej: jako Król próbujesz przeforsować ustawy, a magnaci przekupują posłów, żeby jednym vetem zerwać obrady. Do zagrania w konsoli albo w przeglądarce (Angular + Spring Boot).
 
 **EN:** A turn-based strategy game about the 17th-century Polish-Lithuanian parliament, where a single veto can break the Sejm. Playable in the console or in the browser. A full-stack portfolio project: core Java 21 domain, Spring Boot 4 REST API with JPA, and an Angular 22 frontend.
 
