@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.function.Function;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.hubert.liberumveto.api.dto.BillDto;
 import pl.hubert.liberumveto.api.dto.BillSelectionDto;
 import pl.hubert.liberumveto.api.dto.DeputyDto;
@@ -30,6 +31,7 @@ import pl.hubert.liberumveto.domain.model.Faction;
  * to DTOs. It knows nothing about HTTP (the controller's job) or how games are stored (the repository's).
  */
 @Service
+@Transactional
 public class GameService {
 
     private final GameRepository repository;
@@ -56,6 +58,7 @@ public class GameService {
         return GameDto.from(id, game);
     }
 
+    @Transactional(readOnly = true)
     public GameDto get(UUID id) {
         return withGame(id, game -> GameDto.from(id, game));
     }
@@ -63,6 +66,7 @@ public class GameService {
     /**
      * @param faction only deputies of this faction, or null for all
      */
+    @Transactional(readOnly = true)
     public List<DeputyDto> deputies(UUID id, Faction faction, DeputySort sort) {
         return withGame(id, game -> {
             Bill bill = game.selectedBill().orElse(null);
@@ -88,13 +92,14 @@ public class GameService {
         };
     }
 
+    @Transactional(readOnly = true)
     public List<BillDto> availableBills(UUID id) {
         return withGame(id, game -> game.availableBills().stream().map(BillDto::from).toList());
     }
 
     /** The API selects bills by id; the domain expects a position on the list, so we translate. */
     public BillSelectionDto selectBill(UUID id, int billId) {
-        return withGame(id, game -> {
+        return updateGame(id, game -> {
             List<Bill> bills = game.availableBills();
             int position = 1 + bills.stream().map(Bill::id).toList().indexOf(billId);
             if (position == 0) {
@@ -106,7 +111,7 @@ public class GameService {
     }
 
     public SupportChangeDto bribe(UUID id, int deputyId, int amount) {
-        return withGame(id, game -> {
+        return updateGame(id, game -> {
             SupportChange change = game.bribe(deputyId, amount);
             Bill bill = game.selectedBill().orElseThrow();
             return SupportChangeDto.from(change, DeputyDto.from(change.deputy(), bill),
@@ -115,26 +120,38 @@ public class GameService {
     }
 
     public VoteResponseDto vote(UUID id) {
-        return withGame(id, game -> {
+        return updateGame(id, game -> {
             SejmResult result = game.vote();
             return new VoteResponseDto(SejmResultDto.from(result), GameDto.from(id, game));
         });
     }
 
+    @Transactional(readOnly = true)
     public List<SejmResultDto> history(UUID id) {
         return withGame(id, game -> game.state().history().stream().map(SejmResultDto::from).toList());
     }
 
-    /**
-     * Runs an action on a game while holding its lock. Every request runs on its own thread, and
-     * {@code Game} is not thread-safe: two simultaneous bribes could both pass the budget check.
-     * {@code synchronized (game)} lets only one thread at a time touch a given game; different games
-     * do not block each other.
-     */
+    /** Loads the game and runs a read-only action on it. */
     private <T> T withGame(UUID id, Function<Game, T> action) {
-        Game game = repository.findById(id).orElseThrow(() -> new GameNotFoundException(id));
-        synchronized (game) {
-            return action.apply(game);
-        }
+        return action.apply(load(id));
+    }
+
+    /**
+     * Loads the game, runs an action that changes it and stores the result. All of it happens in the
+     * one transaction of the calling service method.
+     *
+     * <p>Concurrency: every request loads its own copy of the game from the database, so two requests
+     * for the same game no longer share an object to lock on (the earlier {@code synchronized}).
+     * Instead the {@code @Version} column catches the conflict when the second one commits.
+     */
+    private <T> T updateGame(UUID id, Function<Game, T> action) {
+        Game game = load(id);
+        T result = action.apply(game);
+        repository.save(id, game);
+        return result;
+    }
+
+    private Game load(UUID id) {
+        return repository.findById(id).orElseThrow(() -> new GameNotFoundException(id));
     }
 }

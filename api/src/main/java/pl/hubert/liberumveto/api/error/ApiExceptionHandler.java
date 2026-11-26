@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -60,6 +61,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ActionNotAllowedException.class)
     ProblemDetail handleActionNotAllowed(ActionNotAllowedException e) {
         return problem(HttpStatus.CONFLICT, "Action not allowed now", e.getMessage());
+    }
+
+    /** 409: two requests changed the same game at once and this one lost (the {@code @Version} check). */
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    ProblemDetail handleConcurrentModification(ObjectOptimisticLockingFailureException e) {
+        return problem(HttpStatus.CONFLICT, "Concurrent modification",
+                "Stan gry zmienił się w międzyczasie. Odśwież i spróbuj ponownie");
     }
 
     /** Catch-all: log the details for us, but do not leak a stack trace to the client. */

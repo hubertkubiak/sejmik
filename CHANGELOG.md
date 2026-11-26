@@ -3,6 +3,12 @@
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
 ## [Unreleased]
+### Dodane (M5, krok 5)
+- Persystencja: Spring Data JPA + H2 w pliku `./data` (gry przetrwają restart), encje `GameEntity`, `DeputyEntity`, `SejmResultEntity`, mapowanie w `JpaGameRepository`.
+- Optimistic locking (`@Version`) zamiast `synchronized`; konflikt kończy się 409.
+- Transakcje w `GameService` (`@Transactional`, `readOnly` dla odczytów), `open-in-view` wyłączone, konsola H2 pod `/h2-console`.
+- Testy na bazie w pamięci (`src/test/resources/config/application.properties`).
+
 ### Dodane (M5, krok 4)
 - Walidacja żądań (`@Valid`, `@NotNull`, `@Positive`) z polskimi komunikatami.
 - `ApiExceptionHandler` (`@RestControllerAdvice`): wszystkie błędy jako `application/problem+json` (RFC 9457); 400 / 404 / 409 / 422 / 500.
