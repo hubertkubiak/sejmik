@@ -2,7 +2,7 @@
 
 > *„Nie pozwalam!”* Turowa gra konsolowa w Javie 21: jako Król próbujesz przeforsować ustawy na sejmach Rzeczypospolitej, a magnaci przekupują posłów, żeby jednym vetem zerwać obrady.
 
-**EN:** A turn-based console strategy game about the 17th-century Polish-Lithuanian parliament, written in modern Java 21. A portfolio project for learning core Java (OOP, records, sealed types, pattern matching, Stream API, exceptions, file I/O, JUnit 5), built as the foundation for a Spring Boot + Angular stage 2.
+**EN:** A turn-based strategy game about the 17th-century Polish-Lithuanian parliament, playable in the console and through a Spring Boot REST API, written in modern Java 21. A portfolio project for learning core Java (OOP, records, sealed types, pattern matching, Stream API, exceptions, file I/O, JUnit) and then Spring Boot, with an Angular frontend planned.
 
 ![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
 ![Maven](https://img.shields.io/badge/Maven-3.9-blue?logo=apachemaven)
@@ -94,6 +94,32 @@ curl -X POST localhost:8080/api/games
 
 - Stan gry zapisuje się do `save.json` w bieżącym katalogu. Przy następnym uruchomieniu gra zaproponuje wczytanie.
 - Raporty pokrycia testami: `domain/target/site/jacoco/index.html` i `console/target/site/jacoco/index.html`.
+
+## REST API
+
+Jedna tura przez HTTP (API działa na `http://localhost:8080`):
+
+| Metoda | Endpoint | Co robi |
+|---|---|---|
+| `POST` | `/api/games` | nowa gra (201 + `Location`) |
+| `GET` | `/api/games/{id}` | stan gry |
+| `GET` | `/api/games/{id}/bills` | 3 ustawy do wyboru w tej turze |
+| `PUT` | `/api/games/{id}/selected-bill` | `{"billId": 7}`: wybór ustawy; magnaci od razu przekupują |
+| `GET` | `/api/games/{id}/deputies?faction=royal&sort=support` | posłowie z poparciem i szansą na veto |
+| `POST` | `/api/games/{id}/bribes` | `{"deputyId": 1, "amount": 30}` |
+| `POST` | `/api/games/{id}/votes` | głosowanie, wynik sejmu i stan gry |
+| `GET` | `/api/games/{id}/history` | wyniki poprzednich sejmów |
+
+```bash
+GAME=$(curl -si -X POST localhost:8080/api/games | grep -i location | cut -d' ' -f2 | tr -d '\r')
+curl -s $GAME/bills
+curl -s -X PUT  -H 'Content-Type: application/json' -d '{"billId": 7}' $GAME/selected-bill
+curl -s "$GAME/deputies?sort=support"
+curl -s -X POST -H 'Content-Type: application/json' -d '{"deputyId": 1, "amount": 30}' $GAME/bribes
+curl -s -X POST $GAME/votes
+```
+
+Na Windowsie w PowerShellu używaj `curl.exe` (samo `curl` to tam alias `Invoke-WebRequest`).
 
 ## Technologie
 

@@ -3,6 +3,12 @@
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
 ## [Unreleased]
+### Dodane (M5, krok 3)
+- Endpointy pełnej tury: `GET /bills`, `PUT /selected-bill`, `GET /deputies` (filtr `faction`, sortowanie `sort`), `POST /bribes`, `POST /votes`, `GET /history`.
+- Synchronizacja dostępu do gry w `GameService` (jeden wątek naraz na grę).
+- Parametry-enumy w URL bez rozróżniania wielkości liter (`?faction=royal`).
+- Test pełnej gry przez API (`GameFlowTest`).
+
 ### Dodane (M5, krok 2)
 - Moduł `api`: Spring Boot 4.2, `POST /api/games` (201 + Location) i `GET /api/games/{id}`, warstwy controller → service → repository, repozytorium w pamięci, testy `MockMvcTester`.
 - Pliki `names.txt` i `coats-of-arms.txt` przeniesione do modułu `domain`, bo korzystają z nich konsola i API.
