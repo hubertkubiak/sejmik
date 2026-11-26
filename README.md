@@ -105,20 +105,20 @@ java -jar target/liberum-veto.jar
 
 | Koncept | Gdzie |
 |---|---|
-| Klasy, hermetyzacja, `equals`/`hashCode` encji | [`Posel`](src/main/java/pl/hubert/liberumveto/domain/model/Posel.java) |
-| Interfejs i polimorfizm | [`Glosujacy`](src/main/java/pl/hubert/liberumveto/domain/model/Glosujacy.java) |
-| Klasa abstrakcyjna, dziedziczenie, wzorzec *template method* | [`Gracz`](src/main/java/pl/hubert/liberumveto/domain/gracz/Gracz.java), [`Krol`](src/main/java/pl/hubert/liberumveto/domain/gracz/Krol.java), [`Magnat`](src/main/java/pl/hubert/liberumveto/domain/gracz/Magnat.java) |
-| Enumy z polami i metodami | [`Frakcja`](src/main/java/pl/hubert/liberumveto/domain/model/Frakcja.java), [`WynikGry`](src/main/java/pl/hubert/liberumveto/domain/gra/WynikGry.java) |
-| Rekordy, kompaktowy konstruktor, kopie obronne (`Map.copyOf`, `List.copyOf`) | [`Ustawa`](src/main/java/pl/hubert/liberumveto/domain/model/Ustawa.java), [`WynikGlosowania`](src/main/java/pl/hubert/liberumveto/domain/sejm/WynikGlosowania.java) |
-| `sealed interface` + record patterns + wyczerpujący `switch` | [`Komenda`](src/main/java/pl/hubert/liberumveto/console/Komenda.java), [`KonsolaUI`](src/main/java/pl/hubert/liberumveto/console/KonsolaUI.java) |
-| `switch` jako wyrażenie, text blocks | [`GeneratorPoslow`](src/main/java/pl/hubert/liberumveto/domain/gra/GeneratorPoslow.java), [`KonsolaUI`](src/main/java/pl/hubert/liberumveto/console/KonsolaUI.java) |
-| Wyjątki checked i unchecked, własne wyjątki z danymi, multi-catch, opakowywanie (`cause`) | [`wyjatki/`](src/main/java/pl/hubert/liberumveto/domain/wyjatki/), [`Gra.glosuj`](src/main/java/pl/hubert/liberumveto/domain/gra/Gra.java), [`ParserKomend`](src/main/java/pl/hubert/liberumveto/console/ParserKomend.java) |
-| Kolekcje: `EnumMap`, `LinkedHashMap`, niemutowalne listy | [`Sejm`](src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java), [`Statystyki`](src/main/java/pl/hubert/liberumveto/domain/gra/Statystyki.java) |
-| Stream API: `groupingBy`, `counting`, `averagingInt`, `toMap`, komparatory, `IntStream`, `Optional` | [`Statystyki`](src/main/java/pl/hubert/liberumveto/domain/gra/Statystyki.java), [`Sejm`](src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java) |
-| Lambdy, referencje do metod, `Supplier` / `Function` jako zależności | [`Main`](src/main/java/pl/hubert/liberumveto/console/Main.java), [`KonsolaUI.uruchom`](src/main/java/pl/hubert/liberumveto/console/KonsolaUI.java) |
+| Klasy, hermetyzacja, `equals`/`hashCode` encji | [`Deputy`](src/main/java/pl/hubert/liberumveto/domain/model/Deputy.java) |
+| Interfejs i polimorfizm | [`Voter`](src/main/java/pl/hubert/liberumveto/domain/model/Voter.java) |
+| Klasa abstrakcyjna, dziedziczenie, wzorzec *template method* | [`Player`](src/main/java/pl/hubert/liberumveto/domain/player/Player.java), [`King`](src/main/java/pl/hubert/liberumveto/domain/player/King.java), [`Magnate`](src/main/java/pl/hubert/liberumveto/domain/player/Magnate.java) |
+| Enumy z polami i metodami | [`Faction`](src/main/java/pl/hubert/liberumveto/domain/model/Faction.java), [`GameResult`](src/main/java/pl/hubert/liberumveto/domain/game/GameResult.java) |
+| Rekordy, kompaktowy konstruktor, kopie obronne (`Map.copyOf`, `List.copyOf`) | [`Bill`](src/main/java/pl/hubert/liberumveto/domain/model/Bill.java), [`VoteResult`](src/main/java/pl/hubert/liberumveto/domain/sejm/VoteResult.java) |
+| `sealed interface` + record patterns + wyczerpujący `switch` | [`Command`](src/main/java/pl/hubert/liberumveto/console/Command.java), [`ConsoleUI`](src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
+| `switch` jako wyrażenie, text blocks | [`DeputyGenerator`](src/main/java/pl/hubert/liberumveto/domain/game/DeputyGenerator.java), [`ConsoleUI`](src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
+| Wyjątki checked i unchecked, własne wyjątki z danymi, multi-catch, opakowywanie (`cause`) | [`exception/`](src/main/java/pl/hubert/liberumveto/domain/exception/), [`Game.vote`](src/main/java/pl/hubert/liberumveto/domain/game/Game.java), [`CommandParser`](src/main/java/pl/hubert/liberumveto/console/CommandParser.java) |
+| Kolekcje: `EnumMap`, `LinkedHashMap`, niemutowalne listy | [`Sejm`](src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java), [`Statistics`](src/main/java/pl/hubert/liberumveto/domain/game/Statistics.java) |
+| Stream API: `groupingBy`, `counting`, `averagingInt`, `toMap`, komparatory, `IntStream`, `Optional` | [`Statistics`](src/main/java/pl/hubert/liberumveto/domain/game/Statistics.java), [`Sejm`](src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java) |
+| Lambdy, referencje do metod, `Supplier` / `Function` jako zależności | [`Main`](src/main/java/pl/hubert/liberumveto/console/Main.java), [`ConsoleUI.run`](src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
 | Wstrzykiwanie zależności przez konstruktor (`Random`, `Scanner`), composition root | [`Main`](src/main/java/pl/hubert/liberumveto/console/Main.java) |
-| Pliki: NIO.2 (`Path`, `Files`), zapis atomowy, try-with-resources, zasoby z classpath | [`ZapisGry`](src/main/java/pl/hubert/liberumveto/console/zapis/ZapisGry.java), [`ZasobyTekstowe`](src/main/java/pl/hubert/liberumveto/console/ZasobyTekstowe.java) |
-| DTO + mapper (domena niezależna od Jacksona) | [`zapis/`](src/main/java/pl/hubert/liberumveto/console/zapis/) |
+| Pliki: NIO.2 (`Path`, `Files`), zapis atomowy, try-with-resources, zasoby z classpath | [`SaveFile`](src/main/java/pl/hubert/liberumveto/console/save/SaveFile.java), [`TextResources`](src/main/java/pl/hubert/liberumveto/console/TextResources.java) |
+| DTO + mapper (domena niezależna od Jacksona) | [`save/`](src/main/java/pl/hubert/liberumveto/console/save/) |
 | Testy: parametryzowane, test double (`Random` z ustaloną wartością), round-trip z `usingRecursiveComparison` | [`src/test`](src/test/java/pl/hubert/liberumveto/) |
 
 ## Architektura
@@ -126,17 +126,32 @@ java -jar target/liberum-veto.jar
 ```
 pl.hubert.liberumveto
 ├── domain                czysta Java, bez I/O i bibliotek
-│   ├── model             Posel, Ustawa, Frakcja, Glos, TypUstawy, Glosujacy
-│   ├── gracz             Gracz, Krol, Magnat (AI)
-│   ├── sejm              Sejm, WynikGlosowania
-│   ├── gra               Gra, StanGry, Statystyki, GeneratorPoslow, KatalogUstaw
-│   └── wyjatki           SejmZerwany, NiewystarczajacyBudzet, NieprawidlowyWybor, BladZapisuGry
+│   ├── model             Deputy, Bill, Faction, Vote, BillType, Voter
+│   ├── player            Player, King, Magnate (AI)
+│   ├── sejm              Sejm, VoteResult
+│   ├── game              Game, GameState, Statistics, DeputyGenerator, BillCatalog
+│   └── exception         SejmDissolved, InsufficientBudget, InvalidChoice, SaveGame
 └── console               UI i infrastruktura
-    ├── Main, KonsolaUI, ParserKomend, Komenda, ZasobyTekstowe
-    └── zapis             ZapisGry, ZapisGryDto, MapperZapisu (Jackson)
+    ├── Main, ConsoleUI, CommandParser, Command, TextResources
+    └── save              SaveFile, SavedGame (DTO), SaveMapper (Jackson)
 ```
 
-Logika gry nie wie nic o konsoli: `Gra` udostępnia operacje `wybierzUstawe` → `przekup` → `glosuj`, które w etapie 2 wywoła kontroler REST zamiast konsoli.
+Logika gry nie wie nic o konsoli: `Game` udostępnia operacje `selectBill` → `bribe` → `vote`, które w etapie 2 wywoła kontroler REST zamiast konsoli.
+
+Kod (nazwy, komentarze, testy, klucze JSON) jest po angielsku. Po polsku jest tylko to, co widzi gracz: komunikaty, komendy, tytuły ustaw, imiona i herby.
+
+### Słowniczek
+
+| Polski | W kodzie |
+|---|---|
+| poseł | `Deputy` |
+| ustawa | `Bill` |
+| frakcja (królewska / magnacka / niezależna) | `Faction` (`ROYAL` / `MAGNATE` / `INDEPENDENT`) |
+| głos (ZA / PRZECIW / VETO) | `Vote` (`FOR` / `AGAINST` / `VETO`) |
+| poparcie, lojalność, przekupność | support, `loyaltyToKing`, `corruptibility` |
+| łapówka, przekupić | bribe |
+| zerwanie sejmu | `SejmDissolvedException`, `VoteResult.dissolved()` |
+| herb | `coatOfArms` |
 
 ## Roadmapa
 

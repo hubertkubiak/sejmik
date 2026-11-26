@@ -8,59 +8,59 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import pl.hubert.liberumveto.domain.model.Glos;
-import pl.hubert.liberumveto.domain.model.Posel;
-import pl.hubert.liberumveto.domain.model.Ustawa;
-import pl.hubert.liberumveto.domain.wyjatki.SejmZerwanyException;
+import pl.hubert.liberumveto.domain.exception.SejmDissolvedException;
+import pl.hubert.liberumveto.domain.model.Bill;
+import pl.hubert.liberumveto.domain.model.Deputy;
+import pl.hubert.liberumveto.domain.model.Vote;
 
 /**
- * Przeprowadza jedno głosowanie nad ustawą.
+ * The Sejm (parliament): holds a single vote on a bill.
  */
 public class Sejm {
 
-    private final List<Posel> poslowie;
+    private final List<Deputy> deputies;
     private final Random random;
 
-    public Sejm(List<Posel> poslowie, Random random) {
-        this.poslowie = List.copyOf(poslowie);
+    public Sejm(List<Deputy> deputies, Random random) {
+        this.deputies = List.copyOf(deputies);
         this.random = Objects.requireNonNull(random, "random");
-        if (this.poslowie.isEmpty()) {
-            throw new IllegalArgumentException("Sejm bez posłów nie może obradować");
+        if (this.deputies.isEmpty()) {
+            throw new IllegalArgumentException("A Sejm without deputies cannot deliberate");
         }
     }
 
     /**
-     * Każdy poseł oddaje głos (kolejność listy ma znaczenie dla losowania).
-     * Ustawa przechodzi, gdy głosów ZA jest więcej niż PRZECIW. Jedno veto zrywa sejm.
+     * Every deputy casts a vote (the list order matters for the random draws).
+     * The bill passes when there are more FOR votes than AGAINST. A single veto dissolves the Sejm.
      *
-     * @throws SejmZerwanyException gdy choć jeden poseł zgłosił veto
+     * @throws SejmDissolvedException when at least one deputy cast a veto
      */
-    public WynikGlosowania obraduj(Ustawa ustawa) throws SejmZerwanyException {
-        Objects.requireNonNull(ustawa, "ustawa");
+    public VoteResult deliberate(Bill bill) throws SejmDissolvedException {
+        Objects.requireNonNull(bill, "bill");
 
-        // LinkedHashMap zachowuje kolejność, więc "pierwszy zrywający" jest jednoznaczny
-        Map<Posel, Glos> glosy = poslowie.stream()
+        // LinkedHashMap keeps the order, so the "first vetoer" is unambiguous
+        Map<Deputy, Vote> votes = deputies.stream()
                 .collect(Collectors.toMap(
                         Function.identity(),
-                        posel -> posel.zaglosuj(ustawa, random),
+                        deputy -> deputy.vote(bill, random),
                         (a, b) -> a,
                         LinkedHashMap::new));
 
-        Map<Glos, Long> liczbaGlosow = glosy.values().stream()
+        Map<Vote, Long> voteCounts = votes.values().stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-        Optional<Posel> zrywajacy = glosy.entrySet().stream()
-                .filter(wpis -> wpis.getValue() == Glos.VETO)
+        Optional<Deputy> vetoer = votes.entrySet().stream()
+                .filter(entry -> entry.getValue() == Vote.VETO)
                 .map(Map.Entry::getKey)
                 .findFirst();
 
-        if (zrywajacy.isPresent()) {
-            var wynik = new WynikGlosowania(liczbaGlosow, false, zrywajacy);
-            throw new SejmZerwanyException(zrywajacy.get(), wynik);
+        if (vetoer.isPresent()) {
+            var result = new VoteResult(voteCounts, false, vetoer);
+            throw new SejmDissolvedException(vetoer.get(), result);
         }
 
-        long za = liczbaGlosow.getOrDefault(Glos.ZA, 0L);
-        long przeciw = liczbaGlosow.getOrDefault(Glos.PRZECIW, 0L);
-        return new WynikGlosowania(liczbaGlosow, za > przeciw, Optional.empty());
+        long votesFor = voteCounts.getOrDefault(Vote.FOR, 0L);
+        long votesAgainst = voteCounts.getOrDefault(Vote.AGAINST, 0L);
+        return new VoteResult(voteCounts, votesFor > votesAgainst, Optional.empty());
     }
 }

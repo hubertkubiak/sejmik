@@ -5,42 +5,42 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Random;
 import java.util.Scanner;
-import pl.hubert.liberumveto.console.zapis.ZapisGry;
-import pl.hubert.liberumveto.domain.gra.GeneratorPoslow;
-import pl.hubert.liberumveto.domain.gra.Gra;
-import pl.hubert.liberumveto.domain.gra.KatalogUstaw;
+import pl.hubert.liberumveto.console.save.SaveFile;
+import pl.hubert.liberumveto.domain.game.BillCatalog;
+import pl.hubert.liberumveto.domain.game.DeputyGenerator;
+import pl.hubert.liberumveto.domain.game.Game;
 
 /**
- * Punkt wejścia. Tutaj, i tylko tutaj, tworzymy zależności i składamy z nich aplikację
- * ("composition root"). Pozostałe klasy dostają wszystko przez konstruktory.
+ * Entry point. This is the one and only place where dependencies are created and wired together
+ * (the "composition root"). Every other class receives what it needs through its constructor.
  */
 public final class Main {
 
-    private static final Path PLIK_ZAPISU = Path.of("save.json");
+    private static final Path SAVE_PATH = Path.of("save.json");
 
     private Main() {
     }
 
     public static void main(String[] args) {
         var random = new Random();
-        var katalog = KatalogUstaw.domyslny();
-        var generator = new GeneratorPoslow(
-                ZasobyTekstowe.wczytajLinie("imiona.txt"),
-                ZasobyTekstowe.wczytajLinie("herby.txt"),
+        var catalog = BillCatalog.defaultCatalog();
+        var generator = new DeputyGenerator(
+                TextResources.readLines("names.txt"),
+                TextResources.readLines("coats-of-arms.txt"),
                 random);
 
-        var wejscie = new Scanner(System.in, kodowanieKonsoli());
-        var konsola = new KonsolaUI(wejscie, System.out, new ZapisGry(PLIK_ZAPISU));
+        var input = new Scanner(System.in, consoleCharset());
+        var ui = new ConsoleUI(input, System.out, new SaveFile(SAVE_PATH));
 
-        // lambdy jako "przepisy" na grę: konsola sama zdecyduje, którego użyć
-        konsola.uruchom(
-                () -> Gra.nowa(generator, katalog, random),
-                stan -> new Gra(stan, katalog, random));
+        // lambdas as "recipes" for a game: the console decides which one to use
+        ui.run(
+                () -> Game.start(generator, catalog, random),
+                state -> new Game(state, catalog, random));
     }
 
-    /** W Windows konsola często nie używa UTF-8, więc pytamy ją o jej kodowanie. */
-    private static Charset kodowanieKonsoli() {
-        Console konsola = System.console();
-        return konsola != null ? konsola.charset() : Charset.defaultCharset();
+    /** On Windows the console often does not use UTF-8, so we ask it for its charset. */
+    private static Charset consoleCharset() {
+        Console console = System.console();
+        return console != null ? console.charset() : Charset.defaultCharset();
     }
 }

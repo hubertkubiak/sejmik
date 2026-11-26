@@ -211,7 +211,7 @@ W etapie 1 wystarczy jeden moduł z pakietami `domain` i `console`. Podział na 
 
 ## 9. Wymagania niefunkcjonalne
 
-- Kod i nazwy domenowe po polsku, bez polskich znaków w identyfikatorach. Komunikaty w konsoli mogą mieć polskie znaki (UTF-8).
+- Kod po angielsku: pakiety, klasy, metody, zmienne, komentarze, testy, klucze JSON. Po polsku (UTF-8) tylko to, co widzi gracz: komunikaty konsoli, komendy, tytuły ustaw, imiona i herby. Nazwy klas w tabelach powyżej to pierwotne polskie robocze nazwy; odpowiedniki są w słowniczku w README.
 - Brak `static` stanu globalnego; zależności (`Random`, `Scanner`) przekazywane przez konstruktor.
 - Niemutowalność tam, gdzie się da (`record`, `List.copyOf`).
 - Każda klasa ma jedną odpowiedzialność; logika gry nie wie nic o konsoli.

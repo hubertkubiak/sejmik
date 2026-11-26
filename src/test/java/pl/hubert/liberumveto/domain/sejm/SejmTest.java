@@ -9,76 +9,75 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
-import pl.hubert.liberumveto.domain.model.Frakcja;
-import pl.hubert.liberumveto.domain.model.Glos;
-import pl.hubert.liberumveto.domain.model.Posel;
-import pl.hubert.liberumveto.domain.model.StalyRandom;
-import pl.hubert.liberumveto.domain.model.TypUstawy;
-import pl.hubert.liberumveto.domain.model.Ustawa;
-import pl.hubert.liberumveto.domain.wyjatki.SejmZerwanyException;
+import pl.hubert.liberumveto.domain.exception.SejmDissolvedException;
+import pl.hubert.liberumveto.domain.model.Bill;
+import pl.hubert.liberumveto.domain.model.BillType;
+import pl.hubert.liberumveto.domain.model.Deputy;
+import pl.hubert.liberumveto.domain.model.Faction;
+import pl.hubert.liberumveto.domain.model.FixedRandom;
+import pl.hubert.liberumveto.domain.model.Vote;
 
 class SejmTest {
 
-    private static final Ustawa USTAWA = new Ustawa(1, "Podatek", TypUstawy.PODATEK, Map.of());
-    private static final Random PECHOWY = new StalyRandom(0.0);
+    private static final Bill BILL = new Bill(1, "Podatek", BillType.TAX, Map.of());
+    private static final Random UNLUCKY = new FixedRandom(0.0);
 
-    private static Posel posel(int id, int poparcie) {
-        return new Posel(id, "Posel" + id, "Herb", Frakcja.NIEZALEZNA, poparcie, 0.5);
+    private static Deputy deputy(int id, int support) {
+        return new Deputy(id, "Posel" + id, "Herb", Faction.INDEPENDENT, support, 0.5);
     }
 
     @Test
-    void ustawaPrzechodziPrzyWiekszosci() throws SejmZerwanyException {
-        var sejm = new Sejm(List.of(posel(1, 80), posel(2, 60), posel(3, 30)), PECHOWY);
+    void billPassesWithMajority() throws SejmDissolvedException {
+        var sejm = new Sejm(List.of(deputy(1, 80), deputy(2, 60), deputy(3, 30)), UNLUCKY);
 
-        WynikGlosowania wynik = sejm.obraduj(USTAWA);
+        VoteResult result = sejm.deliberate(BILL);
 
-        assertThat(wynik.przyjeta()).isTrue();
-        assertThat(wynik.zerwany()).isFalse();
-        assertThat(wynik.glosy(Glos.ZA)).isEqualTo(2);
-        assertThat(wynik.glosy(Glos.PRZECIW)).isEqualTo(1);
-        assertThat(wynik.glosy(Glos.VETO)).isZero();
+        assertThat(result.passed()).isTrue();
+        assertThat(result.dissolved()).isFalse();
+        assertThat(result.count(Vote.FOR)).isEqualTo(2);
+        assertThat(result.count(Vote.AGAINST)).isEqualTo(1);
+        assertThat(result.count(Vote.VETO)).isZero();
     }
 
     @Test
-    void ustawaUpadaPrzyRemisie() throws SejmZerwanyException {
-        var sejm = new Sejm(List.of(posel(1, 80), posel(2, 30)), PECHOWY);
+    void billFailsOnTie() throws SejmDissolvedException {
+        var sejm = new Sejm(List.of(deputy(1, 80), deputy(2, 30)), UNLUCKY);
 
-        assertThat(sejm.obraduj(USTAWA).przyjeta()).isFalse();
+        assertThat(sejm.deliberate(BILL).passed()).isFalse();
     }
 
     @Test
-    void jednoVetoZrywaSejm() {
-        var sejm = new Sejm(List.of(posel(1, 90), posel(2, 90), posel(3, 90), posel(4, 5)), PECHOWY);
+    void singleVetoDissolvesSejm() {
+        var sejm = new Sejm(List.of(deputy(1, 90), deputy(2, 90), deputy(3, 90), deputy(4, 5)), UNLUCKY);
 
-        SejmZerwanyException wyjatek = assertThrows(SejmZerwanyException.class, () -> sejm.obraduj(USTAWA));
+        SejmDissolvedException exception = assertThrows(SejmDissolvedException.class, () -> sejm.deliberate(BILL));
 
-        assertThat(wyjatek.zrywajacy().id()).isEqualTo(4);
-        assertThat(wyjatek.wynik().przyjeta()).isFalse();
-        assertThat(wyjatek.wynik().glosy(Glos.ZA)).isEqualTo(3);
-        assertThat(wyjatek.wynik().glosy(Glos.VETO)).isEqualTo(1);
-        assertThat(wyjatek.getMessage()).contains("Posel4 h. Herb");
+        assertThat(exception.vetoer().id()).isEqualTo(4);
+        assertThat(exception.result().passed()).isFalse();
+        assertThat(exception.result().count(Vote.FOR)).isEqualTo(3);
+        assertThat(exception.result().count(Vote.VETO)).isEqualTo(1);
+        assertThat(exception.getMessage()).contains("Posel4 h. Herb");
     }
 
     @Test
-    void zrywajacymJestPierwszyKtoZglosilVeto() {
-        var sejm = new Sejm(List.of(posel(1, 90), posel(2, 3), posel(3, 1)), PECHOWY);
+    void vetoerIsTheFirstDeputyToVeto() {
+        var sejm = new Sejm(List.of(deputy(1, 90), deputy(2, 3), deputy(3, 1)), UNLUCKY);
 
-        assertThatThrownBy(() -> sejm.obraduj(USTAWA))
-                .isInstanceOf(SejmZerwanyException.class)
-                .extracting(e -> ((SejmZerwanyException) e).zrywajacy().id())
-                .isEqualTo(2);
+        assertThatThrownBy(() -> sejm.deliberate(BILL))
+                .isInstanceOfSatisfying(SejmDissolvedException.class,
+                        e -> assertThat(e.vetoer().id()).isEqualTo(2));
     }
 
     @Test
-    void wynikZawszeMaWszystkieRodzajeGlosow() {
-        var wynik = new WynikGlosowania(Map.of(Glos.ZA, 3L), true, Optional.empty());
+    void resultAlwaysContainsAllVoteKinds() {
+        var result = new VoteResult(Map.of(Vote.FOR, 3L), true, Optional.empty());
 
-        assertThat(wynik.liczbaGlosow()).containsOnlyKeys(Glos.values());
-        assertThat(wynik.glosy(Glos.PRZECIW)).isZero();
+        assertThat(result.voteCounts()).containsOnlyKeys(Vote.values());
+        assertThat(result.count(Vote.AGAINST)).isZero();
     }
 
     @Test
-    void sejmBezPoslowNieMozeObradowac() {
-        assertThatThrownBy(() -> new Sejm(List.of(), PECHOWY)).isInstanceOf(IllegalArgumentException.class);
+    void sejmWithoutDeputiesCannotDeliberate() {
+        assertThatThrownBy(() -> new Sejm(List.of(), UNLUCKY)).isInstanceOf(IllegalArgumentException.class);
     }
 }

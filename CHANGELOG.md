@@ -2,6 +2,11 @@
 
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
+## [Unreleased]
+### Zmienione
+- Kod przetłumaczony na angielski: pakiety (`player`, `game`, `exception`, `console.save`), klasy, metody, zmienne, komentarze, nazwy testów, klucze JSON zapisu i nazwy plików zasobów (`names.txt`, `coats-of-arms.txt`). Interfejs gracza pozostaje po polsku.
+- Zapisy gry z wcześniejszych wersji (polskie klucze JSON) nie są kompatybilne.
+
 ## [v0.4-statystyki-zapis] (M4)
 ### Dodane
 - Statystyki sejmu na Stream API: średnia lojalność per frakcja, top 3 najbardziej przekupnych, posłowie zagrożeni vetem, średnie poparcie (komenda `statystyki`).
