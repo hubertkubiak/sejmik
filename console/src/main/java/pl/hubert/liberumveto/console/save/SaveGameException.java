@@ -1,4 +1,4 @@
-package pl.hubert.liberumveto.domain.exception;
+package pl.hubert.liberumveto.console.save;
 
 import java.io.Serial;
 

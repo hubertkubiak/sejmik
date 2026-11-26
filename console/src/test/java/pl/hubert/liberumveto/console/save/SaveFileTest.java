@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import pl.hubert.liberumveto.domain.exception.SaveGameException;
 import pl.hubert.liberumveto.domain.game.BillCatalog;
 import pl.hubert.liberumveto.domain.game.DeputyGenerator;
 import pl.hubert.liberumveto.domain.game.Game;

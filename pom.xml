@@ -4,29 +4,30 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Współrzędne projektu: groupId + artifactId + version jednoznacznie identyfikują artefakt -->
+    <!-- Parent (aggregator) POM: builds all modules and holds the shared configuration -->
     <groupId>pl.hubert</groupId>
-    <artifactId>liberum-veto</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <artifactId>liberum-veto-parent</artifactId>
+    <version>0.5.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <name>Liberum Veto</name>
-    <description>Symulator sejmiku szlacheckiego: turowa gra konsolowa w Javie 21</description>
+    <description>Symulator sejmiku szlacheckiego: turowa gra w Javie 21</description>
+
+    <!-- Maven sorts modules by their dependencies, so domain is always built before console -->
+    <modules>
+        <module>domain</module>
+        <module>console</module>
+    </modules>
 
     <properties>
-        <!-- Jedna właściwość ustawia poziom języka i API dla kompilatora -->
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <main.class>pl.hubert.liberumveto.console.Main</main.class>
-
-        <!-- Wersje zależności w jednym miejscu -->
         <jackson.version>2.23.0</jackson.version>
         <junit.version>5.14.4</junit.version>
         <assertj.version>3.27.7</assertj.version>
 
-        <!-- Wersje pluginów -->
         <compiler.plugin.version>3.16.0</compiler.plugin.version>
         <surefire.plugin.version>3.6.1</surefire.plugin.version>
         <jar.plugin.version>3.5.1</jar.plugin.version>
@@ -34,9 +35,19 @@
         <jacoco.plugin.version>0.8.16</jacoco.plugin.version>
     </properties>
 
+    <!-- dependencyManagement only fixes versions; a module still has to declare the dependency itself -->
     <dependencyManagement>
         <dependencies>
-            <!-- BOM (Bill of Materials): ustala spójne wersje wszystkich modułów JUnit -->
+            <dependency>
+                <groupId>pl.hubert</groupId>
+                <artifactId>liberum-veto-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
@@ -44,18 +55,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <!-- Plain <dependencies> in the parent ARE inherited: every module gets the test libraries -->
     <dependencies>
-        <!-- scope domyślny (compile): biblioteka potrzebna w czasie działania aplikacji -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-        <!-- scope "test": biblioteki dostępne tylko w src/test, nie trafiają do aplikacji -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -64,12 +73,28 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <!-- pluginManagement: plugin versions and defaults, activated per module -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${jar.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>${shade.plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <!-- plugins: active in every module -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -77,7 +102,6 @@
                 <version>${compiler.plugin.version}</version>
                 <configuration>
                     <compilerArgs>
-                        <!-- Ostrzeżenia o ryzykownym kodzie (np. surowe typy generyczne) -->
                         <arg>-Xlint:all</arg>
                     </compilerArgs>
                 </configuration>
@@ -88,20 +112,7 @@
                 <version>${surefire.plugin.version}</version>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${jar.plugin.version}</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <!-- Dzięki temu "java -jar" wie, którą klasę uruchomić -->
-                            <mainClass>${main.class}</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <!-- Pokrycie kodu testami: agent JaCoCo śledzi, które linie wykonały się w testach -->
+                <!-- every module gets a coverage report; the 80% rule is set only in domain -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.plugin.version}</version>
@@ -118,63 +129,6 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <!-- build się wywali, jeśli pokrycie pakietów domain spadnie poniżej 80% -->
-                        <id>check</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <rule>
-                                    <element>PACKAGE</element>
-                                    <includes>
-                                        <include>pl.hubert.liberumveto.domain*</include>
-                                    </includes>
-                                    <limits>
-                                        <limit>
-                                            <counter>LINE</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.80</minimum>
-                                        </limit>
-                                    </limits>
-                                </rule>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <!-- "Fat jar": wkłada do jednego jara nasz kod i wszystkie zależności (Jackson),
-                     żeby "java -jar" działało bez ręcznego składania classpath -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>${shade.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>liberum-veto</finalName>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <filters>
-                                <filter>
-                                    <!-- podpisy i deskryptory modułów z zależności nie pasują do sklejonego jara -->
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                        <exclude>META-INF/versions/*/module-info.class</exclude>
-                                        <exclude>module-info.class</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

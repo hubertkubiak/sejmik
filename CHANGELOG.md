@@ -3,6 +3,10 @@
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
 ## [Unreleased]
+### Zmienione (M5, krok 1)
+- Projekt wielomodułowy: `liberum-veto-parent` → `domain` (bez zależności runtime, reguła JaCoCo 80%) i `console` (UI, zapis JSON, fat jar w `console/target/liberum-veto.jar`).
+- `SaveGameException` przeniesiony z domeny do `console.save`, bo dotyczy plików, a domena nie robi I/O.
+
 ### Zmienione
 - Kod przetłumaczony na angielski: pakiety (`player`, `game`, `exception`, `console.save`), klasy, metody, zmienne, komentarze, nazwy testów, klucze JSON zapisu i nazwy plików zasobów (`names.txt`, `coats-of-arms.txt`). Interfejs gracza pozostaje po polsku.
 - Zapisy gry z wcześniejszych wersji (polskie klucze JSON) nie są kompatybilne.

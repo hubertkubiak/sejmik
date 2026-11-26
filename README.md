@@ -84,11 +84,11 @@ Wymagany jest **JDK 21**. Mavena nie trzeba instalować, bo projekt ma Maven Wra
 ./mvnw clean verify          # Windows: mvnw.cmd clean verify
 
 # gra
-java -jar target/liberum-veto.jar
+java -jar console/target/liberum-veto.jar
 ```
 
 - Stan gry zapisuje się do `save.json` w bieżącym katalogu. Przy następnym uruchomieniu gra zaproponuje wczytanie.
-- Raport pokrycia testami znajdziesz w `target/site/jacoco/index.html`.
+- Raporty pokrycia testami: `domain/target/site/jacoco/index.html` i `console/target/site/jacoco/index.html`.
 
 ## Technologie
 
@@ -105,35 +105,40 @@ java -jar target/liberum-veto.jar
 
 | Koncept | Gdzie |
 |---|---|
-| Klasy, hermetyzacja, `equals`/`hashCode` encji | [`Deputy`](src/main/java/pl/hubert/liberumveto/domain/model/Deputy.java) |
-| Interfejs i polimorfizm | [`Voter`](src/main/java/pl/hubert/liberumveto/domain/model/Voter.java) |
-| Klasa abstrakcyjna, dziedziczenie, wzorzec *template method* | [`Player`](src/main/java/pl/hubert/liberumveto/domain/player/Player.java), [`King`](src/main/java/pl/hubert/liberumveto/domain/player/King.java), [`Magnate`](src/main/java/pl/hubert/liberumveto/domain/player/Magnate.java) |
-| Enumy z polami i metodami | [`Faction`](src/main/java/pl/hubert/liberumveto/domain/model/Faction.java), [`GameResult`](src/main/java/pl/hubert/liberumveto/domain/game/GameResult.java) |
-| Rekordy, kompaktowy konstruktor, kopie obronne (`Map.copyOf`, `List.copyOf`) | [`Bill`](src/main/java/pl/hubert/liberumveto/domain/model/Bill.java), [`VoteResult`](src/main/java/pl/hubert/liberumveto/domain/sejm/VoteResult.java) |
-| `sealed interface` + record patterns + wyczerpujący `switch` | [`Command`](src/main/java/pl/hubert/liberumveto/console/Command.java), [`ConsoleUI`](src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
-| `switch` jako wyrażenie, text blocks | [`DeputyGenerator`](src/main/java/pl/hubert/liberumveto/domain/game/DeputyGenerator.java), [`ConsoleUI`](src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
-| Wyjątki checked i unchecked, własne wyjątki z danymi, multi-catch, opakowywanie (`cause`) | [`exception/`](src/main/java/pl/hubert/liberumveto/domain/exception/), [`Game.vote`](src/main/java/pl/hubert/liberumveto/domain/game/Game.java), [`CommandParser`](src/main/java/pl/hubert/liberumveto/console/CommandParser.java) |
-| Kolekcje: `EnumMap`, `LinkedHashMap`, niemutowalne listy | [`Sejm`](src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java), [`Statistics`](src/main/java/pl/hubert/liberumveto/domain/game/Statistics.java) |
-| Stream API: `groupingBy`, `counting`, `averagingInt`, `toMap`, komparatory, `IntStream`, `Optional` | [`Statistics`](src/main/java/pl/hubert/liberumveto/domain/game/Statistics.java), [`Sejm`](src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java) |
-| Lambdy, referencje do metod, `Supplier` / `Function` jako zależności | [`Main`](src/main/java/pl/hubert/liberumveto/console/Main.java), [`ConsoleUI.run`](src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
-| Wstrzykiwanie zależności przez konstruktor (`Random`, `Scanner`), composition root | [`Main`](src/main/java/pl/hubert/liberumveto/console/Main.java) |
-| Pliki: NIO.2 (`Path`, `Files`), zapis atomowy, try-with-resources, zasoby z classpath | [`SaveFile`](src/main/java/pl/hubert/liberumveto/console/save/SaveFile.java), [`TextResources`](src/main/java/pl/hubert/liberumveto/console/TextResources.java) |
-| DTO + mapper (domena niezależna od Jacksona) | [`save/`](src/main/java/pl/hubert/liberumveto/console/save/) |
-| Testy: parametryzowane, test double (`Random` z ustaloną wartością), round-trip z `usingRecursiveComparison` | [`src/test`](src/test/java/pl/hubert/liberumveto/) |
+| Klasy, hermetyzacja, `equals`/`hashCode` encji | [`Deputy`](domain/src/main/java/pl/hubert/liberumveto/domain/model/Deputy.java) |
+| Interfejs i polimorfizm | [`Voter`](domain/src/main/java/pl/hubert/liberumveto/domain/model/Voter.java) |
+| Klasa abstrakcyjna, dziedziczenie, wzorzec *template method* | [`Player`](domain/src/main/java/pl/hubert/liberumveto/domain/player/Player.java), [`King`](domain/src/main/java/pl/hubert/liberumveto/domain/player/King.java), [`Magnate`](domain/src/main/java/pl/hubert/liberumveto/domain/player/Magnate.java) |
+| Enumy z polami i metodami | [`Faction`](domain/src/main/java/pl/hubert/liberumveto/domain/model/Faction.java), [`GameResult`](domain/src/main/java/pl/hubert/liberumveto/domain/game/GameResult.java) |
+| Rekordy, kompaktowy konstruktor, kopie obronne (`Map.copyOf`, `List.copyOf`) | [`Bill`](domain/src/main/java/pl/hubert/liberumveto/domain/model/Bill.java), [`VoteResult`](domain/src/main/java/pl/hubert/liberumveto/domain/sejm/VoteResult.java) |
+| `sealed interface` + record patterns + wyczerpujący `switch` | [`Command`](console/src/main/java/pl/hubert/liberumveto/console/Command.java), [`ConsoleUI`](console/src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
+| `switch` jako wyrażenie, text blocks | [`DeputyGenerator`](domain/src/main/java/pl/hubert/liberumveto/domain/game/DeputyGenerator.java), [`ConsoleUI`](console/src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
+| Wyjątki checked i unchecked, własne wyjątki z danymi, multi-catch, opakowywanie (`cause`) | [`exception/`](domain/src/main/java/pl/hubert/liberumveto/domain/exception/), [`Game.vote`](domain/src/main/java/pl/hubert/liberumveto/domain/game/Game.java), [`CommandParser`](console/src/main/java/pl/hubert/liberumveto/console/CommandParser.java) |
+| Kolekcje: `EnumMap`, `LinkedHashMap`, niemutowalne listy | [`Sejm`](domain/src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java), [`Statistics`](domain/src/main/java/pl/hubert/liberumveto/domain/game/Statistics.java) |
+| Stream API: `groupingBy`, `counting`, `averagingInt`, `toMap`, komparatory, `IntStream`, `Optional` | [`Statistics`](domain/src/main/java/pl/hubert/liberumveto/domain/game/Statistics.java), [`Sejm`](domain/src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java) |
+| Lambdy, referencje do metod, `Supplier` / `Function` jako zależności | [`Main`](console/src/main/java/pl/hubert/liberumveto/console/Main.java), [`ConsoleUI.run`](console/src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
+| Wstrzykiwanie zależności przez konstruktor (`Random`, `Scanner`), composition root | [`Main`](console/src/main/java/pl/hubert/liberumveto/console/Main.java) |
+| Pliki: NIO.2 (`Path`, `Files`), zapis atomowy, try-with-resources, zasoby z classpath | [`SaveFile`](console/src/main/java/pl/hubert/liberumveto/console/save/SaveFile.java), [`TextResources`](console/src/main/java/pl/hubert/liberumveto/console/TextResources.java) |
+| DTO + mapper (domena niezależna od Jacksona) | [`save/`](console/src/main/java/pl/hubert/liberumveto/console/save/) |
+| Testy: parametryzowane, test double (`Random` z ustaloną wartością), round-trip z `usingRecursiveComparison` | [`domain/src/test`](domain/src/test/java/pl/hubert/liberumveto/), [`console/src/test`](console/src/test/java/pl/hubert/liberumveto/) |
 
 ## Architektura
 
+Projekt wielomodułowy Mavena. Moduł `domain` nie ma żadnych zależności runtime, więc kompilator sam pilnuje, żeby logika gry nie sięgnęła po konsolę, pliki ani Jacksona.
+
 ```
+domain/   (liberum-veto-domain)    pl.hubert.liberumveto.domain
+console/  (liberum-veto-console)   pl.hubert.liberumveto.console, zależy od domain + Jackson
+
 pl.hubert.liberumveto
 ├── domain                czysta Java, bez I/O i bibliotek
 │   ├── model             Deputy, Bill, Faction, Vote, BillType, Voter
 │   ├── player            Player, King, Magnate (AI)
 │   ├── sejm              Sejm, VoteResult
 │   ├── game              Game, GameState, Statistics, DeputyGenerator, BillCatalog
-│   └── exception         SejmDissolved, InsufficientBudget, InvalidChoice, SaveGame
+│   └── exception         SejmDissolved, InsufficientBudget, InvalidChoice
 └── console               UI i infrastruktura
     ├── Main, ConsoleUI, CommandParser, Command, TextResources
-    └── save              SaveFile, SavedGame (DTO), SaveMapper (Jackson)
+    └── save              SaveFile, SavedGame (DTO), SaveMapper (Jackson), SaveGameException
 ```
 
 Logika gry nie wie nic o konsoli: `Game` udostępnia operacje `selectBill` → `bribe` → `vote`, które w etapie 2 wywoła kontroler REST zamiast konsoli.

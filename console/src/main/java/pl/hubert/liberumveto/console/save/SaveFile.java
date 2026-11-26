@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
-import pl.hubert.liberumveto.domain.exception.SaveGameException;
 import pl.hubert.liberumveto.domain.game.GameState;
 
 /**

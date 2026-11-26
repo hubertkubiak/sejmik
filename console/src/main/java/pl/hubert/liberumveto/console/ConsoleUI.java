@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import pl.hubert.liberumveto.console.save.SaveFile;
 import pl.hubert.liberumveto.domain.exception.InsufficientBudgetException;
 import pl.hubert.liberumveto.domain.exception.InvalidChoiceException;
-import pl.hubert.liberumveto.domain.exception.SaveGameException;
+import pl.hubert.liberumveto.console.save.SaveGameException;
 import pl.hubert.liberumveto.domain.game.Game;
 import pl.hubert.liberumveto.domain.game.GameState;
 import pl.hubert.liberumveto.domain.game.SejmResult;
