@@ -1,5 +1,5 @@
 .hint {
-  color: var(--lv-ink-soft);
+  color: var(--sj-ink-soft);
   margin-top: 0;
 }
 
@@ -17,8 +17,8 @@
   flex-direction: column;
   gap: 0.75rem;
   padding: 1rem;
-  border: 1px solid var(--lv-border);
-  border-radius: var(--lv-radius);
+  border: 1px solid var(--sj-border);
+  border-radius: var(--sj-radius);
   background: #fff;
 
   h3 {
@@ -47,10 +47,10 @@
   }
 
   .positive dd {
-    color: var(--lv-support-for);
+    color: var(--sj-support-for);
   }
 
   .negative dd {
-    color: var(--lv-support-veto);
+    color: var(--sj-support-veto);
   }
 }

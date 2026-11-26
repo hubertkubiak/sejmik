@@ -6,7 +6,7 @@ import { FACTION_LABELS, signed } from '../labels';
  * The bills available this turn, with their impact on each faction.
  */
 @Component({
-  selector: 'lv-bill-picker',
+  selector: 'sj-bill-picker',
   styleUrl: './bill-picker.scss',
   templateUrl: './bill-picker.html',
 })

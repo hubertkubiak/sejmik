@@ -3,19 +3,19 @@
 }
 
 .tile {
-  --accent: var(--lv-support-none);
+  --accent: var(--sj-support-none);
   display: grid;
   gap: 0.15rem;
   width: 100%;
   height: 100%;
   padding: 0.65rem 0.75rem 0.7rem;
   text-align: left;
-  background: var(--lv-paper);
-  color: var(--lv-ink);
-  border: 1px solid var(--lv-border);
+  background: var(--sj-paper);
+  color: var(--sj-ink);
+  border: 1px solid var(--sj-border);
   border-left: 6px solid var(--accent);
-  border-radius: var(--lv-radius);
-  box-shadow: var(--lv-shadow);
+  border-radius: var(--sj-radius);
+  box-shadow: var(--sj-shadow);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 
   &:hover {
@@ -24,28 +24,28 @@
   }
 
   &.selected {
-    outline: 3px solid var(--lv-gold);
+    outline: 3px solid var(--sj-gold);
     outline-offset: 1px;
     background: #fff4d6;
   }
 }
 
 .level-for {
-  --accent: var(--lv-support-for);
+  --accent: var(--sj-support-for);
 }
 
 .level-against {
-  --accent: var(--lv-support-against);
+  --accent: var(--sj-support-against);
 }
 
 .level-veto {
-  --accent: var(--lv-support-veto);
+  --accent: var(--sj-support-veto);
   background: #fdeef0;
 }
 
 .tile-id {
   font-size: 0.75rem;
-  color: var(--lv-ink-soft);
+  color: var(--sj-ink-soft);
 }
 
 .tile-name {
@@ -56,7 +56,7 @@
 .tile-arms {
   font-style: italic;
   font-size: 0.85rem;
-  color: var(--lv-ink-soft);
+  color: var(--sj-ink-soft);
 }
 
 .tile-faction {

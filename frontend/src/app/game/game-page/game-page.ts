@@ -14,7 +14,7 @@ import { VoteResult } from '../vote-result/vote-result';
  * It provides its own store, so every visit starts with fresh state.
  */
 @Component({
-  selector: 'lv-game-page',
+  selector: 'sj-game-page',
   imports: [RouterLink, GameStatus, BillPicker, SejmHall, BribePanel, VoteResult, HistoryList],
   providers: [GameStore],
   styleUrl: './game-page.scss',

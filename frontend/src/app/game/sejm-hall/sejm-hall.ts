@@ -10,7 +10,7 @@ type FactionFilter = Faction | 'ALL';
  * `selectedId` is a model(): the parent binds it with [(selectedId)] (two-way binding).
  */
 @Component({
-  selector: 'lv-sejm-hall',
+  selector: 'sj-sejm-hall',
   imports: [DeputyTile],
   styleUrl: './sejm-hall.scss',
   templateUrl: './sejm-hall.html',

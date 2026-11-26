@@ -2,6 +2,11 @@
 
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
+## [Unreleased]
+### Zmienione
+- Zmiana nazwy projektu z „Liberum Veto” na **Sejmik** (nazwa „Liberum Veto” przechodzi na osobny projekt symulacji planszówki): pakiet `pl.hubert.sejmik`, artefakty `sejmik-*`, klasa `SejmikApiApplication`, właściwość `sejmik.cors.allowed-origins`, baza H2 `./data/sejmik`, jar konsoli `console/target/sejmik.jar`, prefiks komponentów Angulara `sj`. „Liberum veto” jako mechanika gry zostaje.
+- Gry zapisane wcześniej w bazie `./data/liberum-veto` nie są wczytywane (nowy plik bazy).
+
 ## [v0.6-frontend] (M6)
 ### Dodane
 - CI na GitHub Actions: build i testy backendu (Maven, JDK 21) oraz frontendu (npm ci, Vitest, build) przy każdym pushu i PR.

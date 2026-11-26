@@ -1,6 +1,6 @@
 @if (store.game(); as game) {
-  <h1 class="visually-hidden">Liberum Veto: sejm {{ game.sejmNumber }}</h1>
-  <lv-game-status [game]="game" [atRisk]="store.atRiskCount()" />
+  <h1 class="visually-hidden">Sejmik: sejm {{ game.sejmNumber }}</h1>
+  <sj-game-status [game]="game" [atRisk]="store.atRiskCount()" />
 
   @if (store.error(); as message) {
     <div class="alert" role="alert">
@@ -10,7 +10,7 @@
   }
 
   @if (store.lastResult(); as result) {
-    <lv-vote-result [result]="result" />
+    <sj-vote-result [result]="result" />
   }
 
   @if (game.over) {
@@ -21,7 +21,7 @@
       <a routerLink="/" class="btn">Nowa partia</a>
     </section>
   } @else if (!game.selectedBill) {
-    <lv-bill-picker [bills]="store.bills()" [disabled]="store.busy()" (picked)="selectBill($event)" />
+    <sj-bill-picker [bills]="store.bills()" [disabled]="store.busy()" (picked)="selectBill($event)" />
   } @else {
     <section class="turn">
       <div class="turn-header card">
@@ -37,8 +37,8 @@
       </div>
 
       <div class="turn-layout">
-        <lv-sejm-hall [deputies]="store.deputies()" [(selectedId)]="selectedDeputyId" />
-        <lv-bribe-panel
+        <sj-sejm-hall [deputies]="store.deputies()" [(selectedId)]="selectedDeputyId" />
+        <sj-bribe-panel
           [deputy]="selectedDeputy()"
           [budget]="game.kingBudget"
           [busy]="store.busy()"
@@ -50,10 +50,10 @@
 
   @if (!game.selectedBill && !game.over && store.deputies().length > 0) {
     <!-- before a bill is chosen: who sits in the Sejm (support appears after the choice) -->
-    <lv-sejm-hall [deputies]="store.deputies()" [(selectedId)]="selectedDeputyId" />
+    <sj-sejm-hall [deputies]="store.deputies()" [(selectedId)]="selectedDeputyId" />
   }
 
-  <lv-history-list [history]="store.history()" />
+  <sj-history-list [history]="store.history()" />
 } @else if (store.error(); as message) {
   <section class="card">
     <h1>Nie udało się wczytać gry</h1>

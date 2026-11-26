@@ -6,12 +6,12 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    title: 'Liberum Veto',
+    title: 'Sejmik',
     loadComponent: () => import('./start/start-page/start-page').then((m) => m.StartPage),
   },
   {
     path: 'games/:id',
-    title: 'Liberum Veto: obrady sejmu',
+    title: 'Sejmik: obrady sejmu',
     loadComponent: () => import('./game/game-page/game-page').then((m) => m.GamePage),
   },
   { path: '**', redirectTo: '' },

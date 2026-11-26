@@ -5,7 +5,7 @@ import { Game } from '../../core/api/models';
  * The top bar of the game screen: which Sejm, the treasury and the score.
  */
 @Component({
-  selector: 'lv-game-status',
+  selector: 'sj-game-status',
   styleUrl: './game-status.scss',
   templateUrl: './game-status.html',
 })

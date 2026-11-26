@@ -6,7 +6,7 @@ import { SejmResult } from '../../core/api/models';
  * animation; role="status" makes screen readers announce the result.
  */
 @Component({
-  selector: 'lv-vote-result',
+  selector: 'sj-vote-result',
   styleUrl: './vote-result.scss',
   templateUrl: './vote-result.html',
 })

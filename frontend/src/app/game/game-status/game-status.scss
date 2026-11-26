@@ -7,30 +7,30 @@
   div {
     flex: 1 1 140px;
     padding: 0.6rem 0.9rem;
-    background: var(--lv-paper);
-    border: 1px solid var(--lv-border);
-    border-radius: var(--lv-radius);
+    background: var(--sj-paper);
+    border: 1px solid var(--sj-border);
+    border-radius: var(--sj-radius);
   }
 
   dt {
     font-size: 0.8rem;
-    color: var(--lv-ink-soft);
+    color: var(--sj-ink-soft);
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
 
   dd {
     margin: 0;
-    font-family: var(--lv-font-display);
+    font-family: var(--sj-font-display);
     font-size: 1.4rem;
     font-weight: 700;
   }
 
   .good dd {
-    color: var(--lv-support-for);
+    color: var(--sj-support-for);
   }
 
   .bad dd {
-    color: var(--lv-support-veto);
+    color: var(--sj-support-veto);
   }
 }

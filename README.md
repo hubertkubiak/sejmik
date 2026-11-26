@@ -1,10 +1,10 @@
-# Liberum Veto 🏛️
+# Sejmik 🏛️
 
 > *„Nie pozwalam!”* Turowa gra o sejmach Rzeczypospolitej: jako Król próbujesz przeforsować ustawy, a magnaci przekupują posłów, żeby jednym vetem zerwać obrady. Do zagrania w konsoli albo w przeglądarce (Angular + Spring Boot).
 
 **EN:** A turn-based strategy game about the 17th-century Polish-Lithuanian parliament, where a single veto can break the Sejm. Playable in the console or in the browser. A full-stack portfolio project: core Java 21 domain, Spring Boot 4 REST API with JPA, and an Angular 22 frontend.
 
-[![CI](https://github.com/hubertkubiak/liberum_veto/actions/workflows/ci.yml/badge.svg)](https://github.com/hubertkubiak/liberum_veto/actions/workflows/ci.yml)
+[![CI](https://github.com/hubertkubiak/sejmik/actions/workflows/ci.yml/badge.svg)](https://github.com/hubertkubiak/sejmik/actions/workflows/ci.yml)
 ![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.2-6DB33F?logo=springboot)
 ![Angular](https://img.shields.io/badge/Angular-22-DD0031?logo=angular)
@@ -49,7 +49,7 @@ Wymagania: **JDK 21** i **Node.js 24** (tylko dla frontendu). Mavena nie trzeba 
 
 ```bash
 # terminal 1: REST API na http://localhost:8080 (gry zapisują się w ./data, baza H2)
-java -jar api/target/liberum-veto-api-0.5.0-SNAPSHOT.jar
+java -jar api/target/sejmik-api-0.5.0-SNAPSHOT.jar
 
 # terminal 2: frontend na http://localhost:4200
 cd frontend
@@ -61,12 +61,12 @@ npm start
 |---|---|
 | http://localhost:4200 | gra |
 | http://localhost:8080/swagger-ui.html | dokumentacja API (Swagger UI) |
-| http://localhost:8080/h2-console | podgląd bazy (JDBC URL `jdbc:h2:file:./data/liberum-veto`, user `sa`, bez hasła) |
+| http://localhost:8080/h2-console | podgląd bazy (JDBC URL `jdbc:h2:file:./data/sejmik`, user `sa`, bez hasła) |
 
 ### Gra w konsoli
 
 ```bash
-java -jar console/target/liberum-veto.jar
+java -jar console/target/sejmik.jar
 ```
 
 Komendy: `przekup <id> <kwota>`, `posłowie` (`p`), `statystyki` (`s`), `głosuj` (`g`), `zapisz`, `pomoc` (`?`), `wyjdź`. Polskie znaki są opcjonalne. Stan gry zapisuje się do `save.json`, a przy następnym uruchomieniu gra proponuje wczytanie.
@@ -136,34 +136,34 @@ Na Windowsie w PowerShellu używaj `curl.exe` (samo `curl` to tam alias `Invoke-
 
 | Koncept | Gdzie |
 |---|---|
-| Klasy, hermetyzacja, `equals`/`hashCode` encji | [`Deputy`](domain/src/main/java/pl/hubert/liberumveto/domain/model/Deputy.java) |
-| Interfejs i polimorfizm | [`Voter`](domain/src/main/java/pl/hubert/liberumveto/domain/model/Voter.java) |
-| Klasa abstrakcyjna, dziedziczenie, wzorzec *template method* | [`Player`](domain/src/main/java/pl/hubert/liberumveto/domain/player/Player.java), [`King`](domain/src/main/java/pl/hubert/liberumveto/domain/player/King.java), [`Magnate`](domain/src/main/java/pl/hubert/liberumveto/domain/player/Magnate.java) |
-| Enumy z polami i metodami | [`Faction`](domain/src/main/java/pl/hubert/liberumveto/domain/model/Faction.java), [`GameResult`](domain/src/main/java/pl/hubert/liberumveto/domain/game/GameResult.java) |
-| Rekordy, kompaktowy konstruktor, kopie obronne (`Map.copyOf`, `List.copyOf`) | [`Bill`](domain/src/main/java/pl/hubert/liberumveto/domain/model/Bill.java), [`VoteResult`](domain/src/main/java/pl/hubert/liberumveto/domain/sejm/VoteResult.java) |
-| `sealed interface` + record patterns + wyczerpujący `switch` | [`Command`](console/src/main/java/pl/hubert/liberumveto/console/Command.java), [`ConsoleUI`](console/src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
-| `switch` jako wyrażenie, text blocks | [`DeputyGenerator`](domain/src/main/java/pl/hubert/liberumveto/domain/game/DeputyGenerator.java), [`ConsoleUI`](console/src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java) |
-| Wyjątki checked i unchecked, własne wyjątki z danymi, multi-catch, opakowywanie (`cause`) | [`exception/`](domain/src/main/java/pl/hubert/liberumveto/domain/exception/), [`Game.vote`](domain/src/main/java/pl/hubert/liberumveto/domain/game/Game.java), [`CommandParser`](console/src/main/java/pl/hubert/liberumveto/console/CommandParser.java) |
-| Kolekcje: `EnumMap`, `LinkedHashMap`, niemutowalne listy | [`Sejm`](domain/src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java), [`Statistics`](domain/src/main/java/pl/hubert/liberumveto/domain/game/Statistics.java) |
-| Stream API: `groupingBy`, `counting`, `averagingInt`, `toMap`, komparatory, `IntStream`, `Optional` | [`Statistics`](domain/src/main/java/pl/hubert/liberumveto/domain/game/Statistics.java), [`Sejm`](domain/src/main/java/pl/hubert/liberumveto/domain/sejm/Sejm.java) |
-| Lambdy, referencje do metod, `Supplier` / `Function` jako zależności, metody generyczne | [`Main`](console/src/main/java/pl/hubert/liberumveto/console/Main.java), [`ConsoleUI.run`](console/src/main/java/pl/hubert/liberumveto/console/ConsoleUI.java), [`GameService`](api/src/main/java/pl/hubert/liberumveto/api/service/GameService.java) |
-| Wstrzykiwanie zależności przez konstruktor, composition root | [`Main`](console/src/main/java/pl/hubert/liberumveto/console/Main.java) |
-| Pliki: NIO.2 (`Path`, `Files`), zapis atomowy, try-with-resources, zasoby z classpath | [`SaveFile`](console/src/main/java/pl/hubert/liberumveto/console/save/SaveFile.java), [`TextResources`](console/src/main/java/pl/hubert/liberumveto/console/TextResources.java) |
-| DTO + mapper (domena niezależna od Jacksona) | [`save/`](console/src/main/java/pl/hubert/liberumveto/console/save/) |
-| Testy: parametryzowane, test double (`Random` z ustaloną wartością), round-trip z `usingRecursiveComparison` | [`domain/src/test`](domain/src/test/java/pl/hubert/liberumveto/), [`console/src/test`](console/src/test/java/pl/hubert/liberumveto/) |
+| Klasy, hermetyzacja, `equals`/`hashCode` encji | [`Deputy`](domain/src/main/java/pl/hubert/sejmik/domain/model/Deputy.java) |
+| Interfejs i polimorfizm | [`Voter`](domain/src/main/java/pl/hubert/sejmik/domain/model/Voter.java) |
+| Klasa abstrakcyjna, dziedziczenie, wzorzec *template method* | [`Player`](domain/src/main/java/pl/hubert/sejmik/domain/player/Player.java), [`King`](domain/src/main/java/pl/hubert/sejmik/domain/player/King.java), [`Magnate`](domain/src/main/java/pl/hubert/sejmik/domain/player/Magnate.java) |
+| Enumy z polami i metodami | [`Faction`](domain/src/main/java/pl/hubert/sejmik/domain/model/Faction.java), [`GameResult`](domain/src/main/java/pl/hubert/sejmik/domain/game/GameResult.java) |
+| Rekordy, kompaktowy konstruktor, kopie obronne (`Map.copyOf`, `List.copyOf`) | [`Bill`](domain/src/main/java/pl/hubert/sejmik/domain/model/Bill.java), [`VoteResult`](domain/src/main/java/pl/hubert/sejmik/domain/sejm/VoteResult.java) |
+| `sealed interface` + record patterns + wyczerpujący `switch` | [`Command`](console/src/main/java/pl/hubert/sejmik/console/Command.java), [`ConsoleUI`](console/src/main/java/pl/hubert/sejmik/console/ConsoleUI.java) |
+| `switch` jako wyrażenie, text blocks | [`DeputyGenerator`](domain/src/main/java/pl/hubert/sejmik/domain/game/DeputyGenerator.java), [`ConsoleUI`](console/src/main/java/pl/hubert/sejmik/console/ConsoleUI.java) |
+| Wyjątki checked i unchecked, własne wyjątki z danymi, multi-catch, opakowywanie (`cause`) | [`exception/`](domain/src/main/java/pl/hubert/sejmik/domain/exception/), [`Game.vote`](domain/src/main/java/pl/hubert/sejmik/domain/game/Game.java), [`CommandParser`](console/src/main/java/pl/hubert/sejmik/console/CommandParser.java) |
+| Kolekcje: `EnumMap`, `LinkedHashMap`, niemutowalne listy | [`Sejm`](domain/src/main/java/pl/hubert/sejmik/domain/sejm/Sejm.java), [`Statistics`](domain/src/main/java/pl/hubert/sejmik/domain/game/Statistics.java) |
+| Stream API: `groupingBy`, `counting`, `averagingInt`, `toMap`, komparatory, `IntStream`, `Optional` | [`Statistics`](domain/src/main/java/pl/hubert/sejmik/domain/game/Statistics.java), [`Sejm`](domain/src/main/java/pl/hubert/sejmik/domain/sejm/Sejm.java) |
+| Lambdy, referencje do metod, `Supplier` / `Function` jako zależności, metody generyczne | [`Main`](console/src/main/java/pl/hubert/sejmik/console/Main.java), [`ConsoleUI.run`](console/src/main/java/pl/hubert/sejmik/console/ConsoleUI.java), [`GameService`](api/src/main/java/pl/hubert/sejmik/api/service/GameService.java) |
+| Wstrzykiwanie zależności przez konstruktor, composition root | [`Main`](console/src/main/java/pl/hubert/sejmik/console/Main.java) |
+| Pliki: NIO.2 (`Path`, `Files`), zapis atomowy, try-with-resources, zasoby z classpath | [`SaveFile`](console/src/main/java/pl/hubert/sejmik/console/save/SaveFile.java), [`TextResources`](console/src/main/java/pl/hubert/sejmik/console/TextResources.java) |
+| DTO + mapper (domena niezależna od Jacksona) | [`save/`](console/src/main/java/pl/hubert/sejmik/console/save/) |
+| Testy: parametryzowane, test double (`Random` z ustaloną wartością), round-trip z `usingRecursiveComparison` | [`domain/src/test`](domain/src/test/java/pl/hubert/sejmik/), [`console/src/test`](console/src/test/java/pl/hubert/sejmik/) |
 
 ### Spring Boot (moduł `api`)
 
 | Koncept | Gdzie |
 |---|---|
-| Warstwy controller → service → repository, DTO oddzielone od encji | [`GameController`](api/src/main/java/pl/hubert/liberumveto/api/controller/GameController.java), [`GameService`](api/src/main/java/pl/hubert/liberumveto/api/service/GameService.java), [`dto/`](api/src/main/java/pl/hubert/liberumveto/api/dto/) |
-| IoC i DI: `@Service`, `@Repository`, `@Configuration` + `@Bean` dla klas bez Springa | [`GameConfig`](api/src/main/java/pl/hubert/liberumveto/api/config/GameConfig.java) |
-| Walidacja `@Valid`, `@NotNull`, `@Positive` | [`BribeRequest`](api/src/main/java/pl/hubert/liberumveto/api/dto/BribeRequest.java) |
-| Globalna obsługa błędów, ProblemDetail (RFC 9457) | [`ApiExceptionHandler`](api/src/main/java/pl/hubert/liberumveto/api/error/ApiExceptionHandler.java) |
-| JPA: encje, `@OneToMany`, `@ElementCollection`, `@Version`, Spring Data `JpaRepository` | [`repository/`](api/src/main/java/pl/hubert/liberumveto/api/repository/) |
-| Transakcje `@Transactional` (`readOnly`), `open-in-view` wyłączone | [`GameService`](api/src/main/java/pl/hubert/liberumveto/api/service/GameService.java), [`application.properties`](api/src/main/resources/application.properties) |
-| CORS, konwersja parametrów (`WebMvcConfigurer`), OpenAPI | [`WebConfig`](api/src/main/java/pl/hubert/liberumveto/api/config/WebConfig.java), [`OpenApiConfig`](api/src/main/java/pl/hubert/liberumveto/api/config/OpenApiConfig.java) |
-| Testy `@SpringBootTest` + `MockMvcTester`, baza w pamięci dla testów | [`api/src/test`](api/src/test/java/pl/hubert/liberumveto/api/) |
+| Warstwy controller → service → repository, DTO oddzielone od encji | [`GameController`](api/src/main/java/pl/hubert/sejmik/api/controller/GameController.java), [`GameService`](api/src/main/java/pl/hubert/sejmik/api/service/GameService.java), [`dto/`](api/src/main/java/pl/hubert/sejmik/api/dto/) |
+| IoC i DI: `@Service`, `@Repository`, `@Configuration` + `@Bean` dla klas bez Springa | [`GameConfig`](api/src/main/java/pl/hubert/sejmik/api/config/GameConfig.java) |
+| Walidacja `@Valid`, `@NotNull`, `@Positive` | [`BribeRequest`](api/src/main/java/pl/hubert/sejmik/api/dto/BribeRequest.java) |
+| Globalna obsługa błędów, ProblemDetail (RFC 9457) | [`ApiExceptionHandler`](api/src/main/java/pl/hubert/sejmik/api/error/ApiExceptionHandler.java) |
+| JPA: encje, `@OneToMany`, `@ElementCollection`, `@Version`, Spring Data `JpaRepository` | [`repository/`](api/src/main/java/pl/hubert/sejmik/api/repository/) |
+| Transakcje `@Transactional` (`readOnly`), `open-in-view` wyłączone | [`GameService`](api/src/main/java/pl/hubert/sejmik/api/service/GameService.java), [`application.properties`](api/src/main/resources/application.properties) |
+| CORS, konwersja parametrów (`WebMvcConfigurer`), OpenAPI | [`WebConfig`](api/src/main/java/pl/hubert/sejmik/api/config/WebConfig.java), [`OpenApiConfig`](api/src/main/java/pl/hubert/sejmik/api/config/OpenApiConfig.java) |
+| Testy `@SpringBootTest` + `MockMvcTester`, baza w pamięci dla testów | [`api/src/test`](api/src/test/java/pl/hubert/sejmik/api/) |
 
 ### Angular (katalog `frontend`)
 
@@ -179,10 +179,10 @@ Na Windowsie w PowerShellu używaj `curl.exe` (samo `curl` to tam alias `Invoke-
 ## Architektura
 
 ```
-liberum_veto/
-├── domain/     liberum-veto-domain    reguły gry w czystej Javie, bez żadnych zależności runtime
-├── console/    liberum-veto-console   gra w terminalu, zapis do save.json (Jackson)
-├── api/        liberum-veto-api       Spring Boot: REST, JPA + H2, Swagger
+sejmik/
+├── domain/     sejmik-domain    reguły gry w czystej Javie, bez żadnych zależności runtime
+├── console/    sejmik-console   gra w terminalu, zapis do save.json (Jackson)
+├── api/        sejmik-api       Spring Boot: REST, JPA + H2, Swagger
 ├── frontend/   Angular 22             gra w przeglądarce, rozmawia z api przez HTTP
 └── .github/    CI na GitHub Actions
 ```

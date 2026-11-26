@@ -1,5 +1,5 @@
 .hint {
-  color: var(--lv-ink-soft);
+  color: var(--sj-ink-soft);
 }
 
 .history {
@@ -14,16 +14,16 @@
     grid-template-columns: 5.5rem 1fr;
     gap: 0 0.75rem;
     padding: 0.5rem 0.75rem;
-    border-left: 5px solid var(--lv-support-against);
+    border-left: 5px solid var(--sj-support-against);
     background: #fff;
     border-radius: 6px;
 
     &.passed {
-      border-left-color: var(--lv-support-for);
+      border-left-color: var(--sj-support-for);
     }
 
     &.dissolved {
-      border-left-color: var(--lv-support-veto);
+      border-left-color: var(--sj-support-veto);
     }
   }
 
@@ -34,6 +34,6 @@
 
   .outcome {
     font-size: 0.9rem;
-    color: var(--lv-ink-soft);
+    color: var(--sj-ink-soft);
   }
 }

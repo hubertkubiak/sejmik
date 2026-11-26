@@ -5,7 +5,7 @@ import { SejmResult } from '../../core/api/models';
  * Results of the finished Sejms.
  */
 @Component({
-  selector: 'lv-history-list',
+  selector: 'sj-history-list',
   styleUrl: './history-list.scss',
   templateUrl: './history-list.html',
 })

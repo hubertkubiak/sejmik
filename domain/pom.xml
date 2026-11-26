@@ -6,13 +6,13 @@
 
     <parent>
         <groupId>pl.hubert</groupId>
-        <artifactId>liberum-veto-parent</artifactId>
+        <artifactId>sejmik-parent</artifactId>
         <version>0.5.0-SNAPSHOT</version>
     </parent>
 
     <!-- groupId and version are inherited from the parent -->
-    <artifactId>liberum-veto-domain</artifactId>
-    <name>Liberum Veto :: Domain</name>
+    <artifactId>sejmik-domain</artifactId>
+    <name>Sejmik :: Domain</name>
     <description>Game rules in plain Java: no frameworks, no I/O, no runtime dependencies</description>
 
     <!-- Deliberately no <dependencies>: the domain only gets JUnit and AssertJ (test scope) from the parent -->

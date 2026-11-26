@@ -1,5 +1,5 @@
 /**
- * TypeScript mirrors of the API's DTO records (package pl.hubert.liberumveto.api.dto).
+ * TypeScript mirrors of the API's DTO records (package pl.hubert.sejmik.api.dto).
  * They describe the JSON shape only; they are compile-time types and do not exist at runtime.
  */
 

@@ -12,7 +12,7 @@ export interface BribeRequest {
  * rules are declared in a schema function. The server validates again; this is only for comfort.
  */
 @Component({
-  selector: 'lv-bribe-panel',
+  selector: 'sj-bribe-panel',
   imports: [FormField],
   styleUrl: './bribe-panel.scss',
   templateUrl: './bribe-panel.html',

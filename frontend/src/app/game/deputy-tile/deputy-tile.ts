@@ -6,7 +6,7 @@ import { FACTION_LABELS, SUPPORT_LABELS, supportLevel } from '../labels';
  * One deputy as a tile coloured by support. A real <button>, so it works with keyboard and screen readers.
  */
 @Component({
-  selector: 'lv-deputy-tile',
+  selector: 'sj-deputy-tile',
   styleUrl: './deputy-tile.scss',
   templateUrl: './deputy-tile.html',
 })

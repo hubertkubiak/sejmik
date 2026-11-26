@@ -1,5 +1,5 @@
 .hint {
-  color: var(--lv-ink-soft);
+  color: var(--sj-ink-soft);
 }
 
 label {
@@ -17,13 +17,13 @@ input {
   width: 7rem;
   padding: 0.5rem;
   font: inherit;
-  border: 1px solid var(--lv-ink-soft);
-  border-radius: var(--lv-radius);
+  border: 1px solid var(--sj-ink-soft);
+  border-radius: var(--sj-radius);
   background: #fff;
 }
 
 .error {
   margin: 0.4rem 0 0;
-  color: var(--lv-support-veto);
+  color: var(--sj-support-veto);
   font-weight: 600;
 }

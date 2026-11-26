@@ -10,7 +10,7 @@
 
 .rules {
   padding-left: 1.25rem;
-  color: var(--lv-ink-soft);
+  color: var(--sj-ink-soft);
 
   li + li {
     margin-top: 0.35rem;
@@ -30,6 +30,6 @@
 
 .error {
   margin-top: 1rem;
-  color: var(--lv-support-veto);
+  color: var(--sj-support-veto);
   font-weight: 600;
 }

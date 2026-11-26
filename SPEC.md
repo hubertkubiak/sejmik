@@ -1,4 +1,4 @@
-# Liberum Veto: symulator sejmiku szlacheckiego
+# Sejmik: symulator sejmiku szlacheckiego
 
 > Projekt portfolio pokazujący naukę Javy od podstaw (core Java), a potem przejście do backendu (Spring Boot) z frontem w Angularze.
 
@@ -174,10 +174,10 @@ Uwaga: URL-e i pola JSON są po angielsku, bo API jest kontraktem dla programist
 ## 7. Struktura projektu
 
 ```
-liberum-veto/
+sejmik/
 ├── pom.xml                     (parent, multi-module od etapu 2)
 ├── domain/                     (czysta Java: model, logika, wyjątki)
-│   └── src/main/java/pl/hubert/liberumveto/domain/
+│   └── src/main/java/pl/hubert/sejmik/domain/
 │       ├── model/              Posel, Ustawa, Frakcja, Glos...
 │       ├── gracz/              Gracz, Krol, Magnat
 │       ├── sejm/               Sejm, WynikGlosowania

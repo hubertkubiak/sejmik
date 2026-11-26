@@ -14,14 +14,14 @@
 
 .filter {
   padding: 0.25rem 0.75rem;
-  border: 1px solid var(--lv-border);
+  border: 1px solid var(--sj-border);
   border-radius: 999px;
-  background: var(--lv-paper);
-  color: var(--lv-ink);
+  background: var(--sj-paper);
+  color: var(--sj-ink);
 
   &.active {
-    background: var(--lv-crimson-dark);
-    border-color: var(--lv-crimson-dark);
+    background: var(--sj-crimson-dark);
+    border-color: var(--sj-crimson-dark);
     color: #fff;
   }
 }
@@ -36,5 +36,5 @@
 }
 
 .empty {
-  color: var(--lv-ink-soft);
+  color: var(--sj-ink-soft);
 }

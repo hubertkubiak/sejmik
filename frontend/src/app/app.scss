@@ -9,23 +9,23 @@
   align-items: baseline;
   gap: 1rem;
   padding: 0.9rem 1.5rem;
-  background: var(--lv-crimson-dark);
-  color: var(--lv-parchment);
-  border-bottom: 3px solid var(--lv-gold);
+  background: var(--sj-crimson-dark);
+  color: var(--sj-parchment);
+  border-bottom: 3px solid var(--sj-gold);
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--lv-font-display);
+  font-family: var(--sj-font-display);
   font-size: 1.5rem;
   color: inherit;
   text-decoration: none;
 }
 
 .brand-mark {
-  color: var(--lv-gold);
+  color: var(--sj-gold);
 }
 
 .tagline {

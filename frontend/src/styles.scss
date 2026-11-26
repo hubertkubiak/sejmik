@@ -1,25 +1,25 @@
 /* Global design tokens and base styles. Component styles live next to their components. */
 
 :root {
-  --lv-crimson: #9b1b30;
-  --lv-crimson-dark: #5e0f1c;
-  --lv-gold: #c9a227;
-  --lv-parchment: #f6efdf;
-  --lv-paper: #fffaf0;
-  --lv-ink: #2b2118;
-  --lv-ink-soft: #5c4d3c;
-  --lv-border: #d8c9a8;
+  --sj-crimson: #9b1b30;
+  --sj-crimson-dark: #5e0f1c;
+  --sj-gold: #c9a227;
+  --sj-parchment: #f6efdf;
+  --sj-paper: #fffaf0;
+  --sj-ink: #2b2118;
+  --sj-ink-soft: #5c4d3c;
+  --sj-border: #d8c9a8;
 
   /* support colours: text on them keeps WCAG AA contrast */
-  --lv-support-for: #2e6b3a;
-  --lv-support-against: #8a6d1d;
-  --lv-support-veto: #a3192d;
-  --lv-support-none: #6b6256;
+  --sj-support-for: #2e6b3a;
+  --sj-support-against: #8a6d1d;
+  --sj-support-veto: #a3192d;
+  --sj-support-none: #6b6256;
 
-  --lv-font-display: 'Georgia', 'Times New Roman', serif;
-  --lv-font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --lv-radius: 10px;
-  --lv-shadow: 0 2px 6px rgb(43 33 24 / 0.12);
+  --sj-font-display: 'Georgia', 'Times New Roman', serif;
+  --sj-font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --sj-radius: 10px;
+  --sj-shadow: 0 2px 6px rgb(43 33 24 / 0.12);
 
   color-scheme: light;
 }
@@ -32,16 +32,16 @@
 
 body {
   margin: 0;
-  font-family: var(--lv-font-body);
-  color: var(--lv-ink);
-  background: var(--lv-parchment);
+  font-family: var(--sj-font-body);
+  color: var(--sj-ink);
+  background: var(--sj-parchment);
   line-height: 1.5;
 }
 
 h1,
 h2,
 h3 {
-  font-family: var(--lv-font-display);
+  font-family: var(--sj-font-display);
   line-height: 1.2;
   margin: 0 0 0.5em;
 }
@@ -57,15 +57,15 @@ button {
   justify-content: center;
   gap: 0.4rem;
   padding: 0.6rem 1.2rem;
-  border: 2px solid var(--lv-crimson);
-  border-radius: var(--lv-radius);
-  background: var(--lv-crimson);
+  border: 2px solid var(--sj-crimson);
+  border-radius: var(--sj-radius);
+  background: var(--sj-crimson);
   color: #fff;
   font-weight: 600;
   transition: background 0.15s ease, transform 0.1s ease;
 
   &:hover:not(:disabled) {
-    background: var(--lv-crimson-dark);
+    background: var(--sj-crimson-dark);
   }
 
   &:active:not(:disabled) {
@@ -79,20 +79,20 @@ button {
 
   &.btn-secondary {
     background: transparent;
-    color: var(--lv-crimson-dark);
+    color: var(--sj-crimson-dark);
   }
 }
 
 :focus-visible {
-  outline: 3px solid var(--lv-gold);
+  outline: 3px solid var(--sj-gold);
   outline-offset: 2px;
 }
 
 .card {
-  background: var(--lv-paper);
-  border: 1px solid var(--lv-border);
-  border-radius: var(--lv-radius);
-  box-shadow: var(--lv-shadow);
+  background: var(--sj-paper);
+  border: 1px solid var(--sj-border);
+  border-radius: var(--sj-radius);
+  box-shadow: var(--sj-shadow);
   padding: 1.25rem;
 }
 

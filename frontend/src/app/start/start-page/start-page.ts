@@ -4,14 +4,14 @@ import { firstValueFrom } from 'rxjs';
 import { errorMessage } from '../../core/api/error-message';
 import { GameApi } from '../../core/api/game-api';
 
-const LAST_GAME_KEY = 'liberum-veto.last-game';
+const LAST_GAME_KEY = 'sejmik.last-game';
 
 /**
  * Landing page: start a new game or continue the last one (its id is remembered in localStorage).
  */
 @Component({
   imports: [RouterLink],
-  selector: 'lv-start-page',
+  selector: 'sj-start-page',
   styleUrl: './start-page.scss',
   templateUrl: './start-page.html',
 })

@@ -19,7 +19,7 @@
   <ul class="grid">
     @for (deputy of visible(); track deputy.id) {
       <li>
-        <lv-deputy-tile [deputy]="deputy" [selected]="selectedId() === deputy.id" (picked)="toggle($event)" />
+        <sj-deputy-tile [deputy]="deputy" [selected]="selectedId() === deputy.id" (picked)="toggle($event)" />
       </li>
     } @empty {
       <li class="empty">Brak posłów w tym stronnictwie.</li>
