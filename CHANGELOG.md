@@ -3,6 +3,12 @@
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
 ## [Unreleased]
+### Dodane (M5, krok 2)
+- Moduł `api`: Spring Boot 4.2, `POST /api/games` (201 + Location) i `GET /api/games/{id}`, warstwy controller → service → repository, repozytorium w pamięci, testy `MockMvcTester`.
+- Pliki `names.txt` i `coats-of-arms.txt` przeniesione do modułu `domain`, bo korzystają z nich konsola i API.
+- JUnit 5 → 6.1 (zgodnie z Spring Boot 4.2), flaga kompilatora `-parameters`.
+- Endpointy API w SPEC po angielsku; wybór ustawy jako osobny krok (`PUT /selected-bill`).
+
 ### Zmienione (M5, krok 1)
 - Projekt wielomodułowy: `liberum-veto-parent` → `domain` (bez zależności runtime, reguła JaCoCo 80%) i `console` (UI, zapis JSON, fat jar w `console/target/liberum-veto.jar`).
 - `SaveGameException` przeniesiony z domeny do `console.save`, bo dotyczy plików, a domena nie robi I/O.

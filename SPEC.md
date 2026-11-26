@@ -144,15 +144,16 @@ ZA: 11 | PRZECIW: 8 | VETO: 1
 ### 6.1. REST API
 | Metoda | Endpoint | Opis |
 |---|---|---|
-| `POST` | `/api/gry` | nowa gra → `GraDto` |
-| `GET` | `/api/gry/{id}` | stan gry |
-| `GET` | `/api/gry/{id}/posłowie` | lista posłów (filtry: `?frakcja=`, `?sort=poparcie`) |
-| `GET` | `/api/gry/{id}/ustawy` | ustawy dostępne w turze |
-| `POST` | `/api/gry/{id}/lapowki` | `{ poselId, kwota }` |
-| `POST` | `/api/gry/{id}/glosowania` | `{ ustawaId }` → `WynikGlosowaniaDto` |
-| `GET` | `/api/gry/{id}/historia` | wyniki poprzednich sejmów |
+| `POST` | `/api/games` | nowa gra → `GameDto` |
+| `GET` | `/api/games/{id}` | stan gry |
+| `GET` | `/api/games/{id}/deputies` | lista posłów (filtry: `?faction=`, `?sort=support`) |
+| `GET` | `/api/games/{id}/bills` | ustawy dostępne w turze |
+| `PUT` | `/api/games/{id}/selected-bill` | `{ billId }`: wybór ustawy, po którym magnaci od razu rozdają łapówki |
+| `POST` | `/api/games/{id}/bribes` | `{ deputyId, amount }` |
+| `POST` | `/api/games/{id}/votes` | głosowanie nad wybraną ustawą → `VoteResultDto` |
+| `GET` | `/api/games/{id}/history` | wyniki poprzednich sejmów |
 
-Uwaga: w kodzie i URL-ach unikamy polskich znaków (`poslowie`, nie `posłowie`).
+Uwaga: URL-e i pola JSON są po angielsku, bo API jest kontraktem dla programistów, a nie komunikacją z graczem. Wybór ustawy to osobny krok przed przekupstwami, zgodnie z przebiegiem tury z punktu 3.1 (magnaci przekupują przed Królem).
 
 ### 6.2. Wymagania techniczne
 - Warstwy: `controller` → `service` → `repository`, z DTO oddzielonymi od encji.

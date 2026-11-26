@@ -6,7 +6,8 @@
 
 ![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
 ![Maven](https://img.shields.io/badge/Maven-3.9-blue?logo=apachemaven)
-![JUnit](https://img.shields.io/badge/JUnit-5-green?logo=junit5)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.2-6DB33F?logo=springboot)
+![JUnit](https://img.shields.io/badge/JUnit-6-green?logo=junit5)
 ![Coverage](https://img.shields.io/badge/coverage%20domain-%E2%89%A580%25-brightgreen)
 
 ---
@@ -83,8 +84,12 @@ Wymagany jest **JDK 21**. Mavena nie trzeba instalować, bo projekt ma Maven Wra
 # build + testy + raport pokrycia + fat jar
 ./mvnw clean verify          # Windows: mvnw.cmd clean verify
 
-# gra
+# gra w konsoli
 java -jar console/target/liberum-veto.jar
+
+# REST API (http://localhost:8080)
+java -jar api/target/liberum-veto-api-0.5.0-SNAPSHOT.jar
+curl -X POST localhost:8080/api/games
 ```
 
 - Stan gry zapisuje się do `save.json` w bieżącym katalogu. Przy następnym uruchomieniu gra zaproponuje wczytanie.
@@ -96,10 +101,11 @@ java -jar console/target/liberum-veto.jar
 |---|---|
 | Język | **Java 21 (LTS)** |
 | Build | **Maven 3.9** + Maven Wrapper, maven-shade-plugin (fat jar) |
-| Testy | **JUnit 5** (Jupiter, testy parametryzowane, `@Nested`, `@TempDir`), **AssertJ** |
+| Testy | **JUnit 6** (Jupiter, testy parametryzowane, `@Nested`, `@TempDir`), **AssertJ** |
 | Pokrycie | **JaCoCo** z regułą ≥ 80% linii dla pakietów `domain` (build pada poniżej progu) |
 | Serializacja | **Jackson Databind** (rekordy bez adnotacji) |
 | UI | konsola (`Scanner` / `PrintStream`) |
+| Backend | **Spring Boot 4.2** (Spring MVC 7, embedded Tomcat), `MockMvcTester` w testach |
 
 ## Koncepty Javy w projekcie
 
@@ -128,6 +134,7 @@ Projekt wielomodułowy Mavena. Moduł `domain` nie ma żadnych zależności runt
 ```
 domain/   (liberum-veto-domain)    pl.hubert.liberumveto.domain
 console/  (liberum-veto-console)   pl.hubert.liberumveto.console, zależy od domain + Jackson
+api/      (liberum-veto-api)       pl.hubert.liberumveto.api: controller → service → repository, dto, config (Spring Boot)
 
 pl.hubert.liberumveto
 ├── domain                czysta Java, bez I/O i bibliotek
