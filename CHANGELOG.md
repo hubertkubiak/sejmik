@@ -2,8 +2,16 @@
 
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
-## [Unreleased]
-### Dodane (M6, krok 1-2)
+## [v0.6-frontend] (M6)
+### Dodane
+- CI na GitHub Actions: build i testy backendu (Maven, JDK 21) oraz frontendu (npm ci, Vitest, build) przy każdym pushu i PR.
+- README na całą aplikację: GIF z rozgrywki, uruchomienie pełnego stosu, koncepty Javy, Springa i Angulara.
+
+### Naprawione
+- `mvnw` z prawem wykonania w gicie (wymagane na Linuksie).
+- `frontend/package-lock.json` przeliczony na Linuksie: lock z Windowsa nie przechodził `npm ci` w CI (zależności opcjonalne zależne od platformy).
+
+### Dodane (frontend)
 - Frontend w Angularze 22 (`frontend/`): standalone components, sygnały, `@Service`, Signal Forms, leniwe trasy, `HttpClient` z typowanymi DTO.
 - Sala sejmowa z kafelkami posłów kolorowanymi według poparcia, filtr stronnictw, panel przekupstwa z walidacją budżetu, animacja „Nie pozwalam!” przy zerwaniu sejmu, kronika sejmów, ekran końca gry.
 - Testy frontendu w Vitest (serwis HTTP, store, komponenty) i GIF z rozgrywki w `docs/gameplay.gif`.

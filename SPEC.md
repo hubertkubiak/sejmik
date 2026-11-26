@@ -237,11 +237,11 @@ Każdy kamień milowy kończy się tagiem w gicie (`v0.1-model`, `v0.2-glosowani
 
 ## 11. Kryteria akceptacji (Definition of Done)
 
-- [ ] Można rozegrać pełną grę (5 sejmów) w konsoli od startu do ekranu końcowego.
-- [ ] Gra zapisuje się i wczytuje bez utraty stanu.
-- [ ] Wszystkie testy przechodzą, pokrycie `domain` co najmniej 80%.
-- [ ] README zawiera: opis gry, zrzut lub GIF z rozgrywki, instrukcję uruchomienia, listę użytych konceptów Javy.
-- [ ] (Etap 2) API udokumentowane w Swaggerze, front komunikuje się z backendem.
+- [x] Można rozegrać pełną grę (5 sejmów) w konsoli od startu do ekranu końcowego.
+- [x] Gra zapisuje się i wczytuje bez utraty stanu.
+- [x] Wszystkie testy przechodzą, pokrycie `domain` co najmniej 80%.
+- [x] README zawiera: opis gry, zrzut lub GIF z rozgrywki, instrukcję uruchomienia, listę użytych konceptów Javy.
+- [x] (Etap 2) API udokumentowane w Swaggerze, front komunikuje się z backendem.
 
 ---
 
