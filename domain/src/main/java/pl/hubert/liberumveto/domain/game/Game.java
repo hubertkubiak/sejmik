@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import pl.hubert.liberumveto.domain.exception.ActionNotAllowedException;
 import pl.hubert.liberumveto.domain.exception.InvalidChoiceException;
 import pl.hubert.liberumveto.domain.exception.SejmDissolvedException;
 import pl.hubert.liberumveto.domain.model.Bill;
@@ -77,7 +78,7 @@ public class Game {
     public Map<Deputy, Integer> selectBill(int positionOnList) {
         requireGameInProgress();
         if (state.selectedBill().isPresent()) {
-            throw new IllegalStateException("A bill has already been selected for this Sejm");
+            throw new ActionNotAllowedException("Ustawa na ten sejm została już wybrana");
         }
         List<Bill> bills = state.availableBills();
         if (positionOnList < 1 || positionOnList > bills.size()) {
@@ -141,7 +142,7 @@ public class Game {
     /** The outcome of the game; available only after the last Sejm. */
     public GameResult result() {
         if (!isOver()) {
-            throw new IllegalStateException("The game is still in progress");
+            throw new ActionNotAllowedException("Gra jeszcze trwa");
         }
         if (passedCount() >= WINNING_THRESHOLD) {
             return GameResult.KING_WINS;
@@ -154,7 +155,7 @@ public class Game {
 
     private void requireGameInProgress() {
         if (isOver()) {
-            throw new IllegalStateException("The game is over");
+            throw new ActionNotAllowedException("Gra się już zakończyła");
         }
     }
 

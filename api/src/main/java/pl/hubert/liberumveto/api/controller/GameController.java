@@ -1,5 +1,6 @@
 package pl.hubert.liberumveto.api.controller;
 
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -73,13 +74,13 @@ public class GameController {
 
     /** PUT, because it sets the value of a single "slot" of the game: the selected bill. */
     @PutMapping("/{id}/selected-bill")
-    public BillSelectionDto selectBill(@PathVariable UUID id, @RequestBody SelectBillRequest request) {
+    public BillSelectionDto selectBill(@PathVariable UUID id, @Valid @RequestBody SelectBillRequest request) {
         return service.selectBill(id, request.billId());
     }
 
     /** {@code @RequestBody}: Jackson turns the JSON body into the record. */
     @PostMapping("/{id}/bribes")
-    public SupportChangeDto bribe(@PathVariable UUID id, @RequestBody BribeRequest request) {
+    public SupportChangeDto bribe(@PathVariable UUID id, @Valid @RequestBody BribeRequest request) {
         return service.bribe(id, request.deputyId(), request.amount());
     }
 

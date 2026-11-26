@@ -3,6 +3,11 @@
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
 ## [Unreleased]
+### Dodane (M5, krok 4)
+- Walidacja żądań (`@Valid`, `@NotNull`, `@Positive`) z polskimi komunikatami.
+- `ApiExceptionHandler` (`@RestControllerAdvice`): wszystkie błędy jako `application/problem+json` (RFC 9457); 400 / 404 / 409 / 422 / 500.
+- Wyjątek domenowy `ActionNotAllowedException` (gra zakończona, ustawa już wybrana) z polskim komunikatem.
+
 ### Dodane (M5, krok 3)
 - Endpointy pełnej tury: `GET /bills`, `PUT /selected-bill`, `GET /deputies` (filtr `faction`, sortowanie `sort`), `POST /bribes`, `POST /votes`, `GET /history`.
 - Synchronizacja dostępu do gry w `GameService` (jeden wątek naraz na grę).
