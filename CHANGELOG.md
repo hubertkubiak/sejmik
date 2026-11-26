@@ -2,6 +2,12 @@
 
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
+## [Unreleased]
+### Dodane (M6, krok 1-2)
+- Frontend w Angularze 22 (`frontend/`): standalone components, sygnały, `@Service`, Signal Forms, leniwe trasy, `HttpClient` z typowanymi DTO.
+- Sala sejmowa z kafelkami posłów kolorowanymi według poparcia, filtr stronnictw, panel przekupstwa z walidacją budżetu, animacja „Nie pozwalam!” przy zerwaniu sejmu, kronika sejmów, ekran końca gry.
+- Testy frontendu w Vitest (serwis HTTP, store, komponenty) i GIF z rozgrywki w `docs/gameplay.gif`.
+
 ## [v0.5-api] (M5)
 ### Dodane (M5, krok 6)
 - Dokumentacja API: springdoc-openapi 3.2 (Swagger UI pod `/swagger-ui.html`, OpenAPI pod `/v3/api-docs`), `@Tag` i `@Operation` w kontrolerze.

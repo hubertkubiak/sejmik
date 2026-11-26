@@ -1,0 +1,24 @@
+<section
+  class="result"
+  role="status"
+  [class.dissolved]="result().dissolved"
+  [class.passed]="result().passed"
+>
+  @if (result().dissolved) {
+    <p class="veto-shout" aria-hidden="true">Nie pozwalam!</p>
+    <h2>Sejm {{ result().number }} zerwany</h2>
+    <p>
+      Liberum veto zgłosił <strong>{{ result().vetoer?.fullName }}</strong>.
+      Ustawa „{{ result().bill.title }}” przepada.
+    </p>
+  } @else if (result().passed) {
+    <h2>Vivat! Ustawa przyjęta</h2>
+    <p>„{{ result().bill.title }}” przeszła na sejmie {{ result().number }}.</p>
+  } @else {
+    <h2>Ustawa odrzucona</h2>
+    <p>„{{ result().bill.title }}” nie zdobyła większości na sejmie {{ result().number }}.</p>
+  }
+  <p class="counts">
+    ZA: {{ result().votesFor }} · PRZECIW: {{ result().votesAgainst }} · VETO: {{ result().vetoes }}
+  </p>
+</section>

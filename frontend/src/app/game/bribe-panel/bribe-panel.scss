@@ -1,0 +1,29 @@
+.hint {
+  color: var(--lv-ink-soft);
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+input {
+  width: 7rem;
+  padding: 0.5rem;
+  font: inherit;
+  border: 1px solid var(--lv-ink-soft);
+  border-radius: var(--lv-radius);
+  background: #fff;
+}
+
+.error {
+  margin: 0.4rem 0 0;
+  color: var(--lv-support-veto);
+  font-weight: 600;
+}

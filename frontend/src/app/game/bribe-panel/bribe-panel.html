@@ -1,0 +1,25 @@
+<section class="card" aria-labelledby="bribe-title">
+  <h2 id="bribe-title">Sakiewka królewska</h2>
+
+  @if (deputy(); as d) {
+    <p>
+      Wybrany poseł: <strong>{{ d.fullName }}</strong><br />
+      poparcie {{ d.support }}, przekupność {{ d.corruptibility }}
+    </p>
+  } @else {
+    <p class="hint">Kliknij posła w sali obrad, aby go przekupić.</p>
+  }
+
+  <form (submit)="onSubmit($event)" novalidate>
+    <label for="bribe-amount">Kwota (dukaty)</label>
+    <div class="row">
+      <input id="bribe-amount" type="number" inputmode="numeric" [formField]="bribeForm.amount"
+             [attr.aria-describedby]="bribeForm.amount().invalid() ? 'bribe-error' : null" />
+      <button type="submit" class="btn" [disabled]="!canSubmit()">Przekup</button>
+    </div>
+    @if (bribeForm.amount().touched() && bribeForm.amount().invalid()) {
+      <p id="bribe-error" class="error" role="alert">{{ bribeForm.amount().errors()[0].message }}</p>
+    }
+  </form>
+  <p class="hint">Każdy dukat działa razy przekupność posła. Najtańsi są ci najbardziej przekupni.</p>
+</section>

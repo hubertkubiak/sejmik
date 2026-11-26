@@ -1,0 +1,28 @@
+<section aria-labelledby="hall-title">
+  <div class="hall-header">
+    <h2 id="hall-title">Sala obrad</h2>
+    <div class="filters" role="group" aria-label="Filtr stronnictwa">
+      @for (option of filters; track option.value) {
+        <button
+          type="button"
+          class="filter"
+          [class.active]="filter() === option.value"
+          [attr.aria-pressed]="filter() === option.value"
+          (click)="filter.set(option.value)"
+        >
+          {{ option.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <ul class="grid">
+    @for (deputy of visible(); track deputy.id) {
+      <li>
+        <lv-deputy-tile [deputy]="deputy" [selected]="selectedId() === deputy.id" (picked)="toggle($event)" />
+      </li>
+    } @empty {
+      <li class="empty">Brak posłów w tym stronnictwie.</li>
+    }
+  </ul>
+</section>

@@ -1,0 +1,24 @@
+<dl class="status">
+  <div>
+    <dt>Sejm</dt>
+    <dd>{{ game().sejmNumber }} / {{ game().sejmCount }}</dd>
+  </div>
+  <div>
+    <dt>Skarbiec</dt>
+    <dd>{{ game().kingBudget }} dukatów</dd>
+  </div>
+  <div class="good">
+    <dt>Przyjęte ustawy</dt>
+    <dd>{{ game().passedCount }}</dd>
+  </div>
+  <div class="bad">
+    <dt>Zerwane sejmy</dt>
+    <dd>{{ game().dissolvedCount }}</dd>
+  </div>
+  @if (game().selectedBill) {
+    <div class="bad">
+      <dt>Zagrożeni vetem</dt>
+      <dd>{{ atRisk() }}</dd>
+    </div>
+  }
+</dl>

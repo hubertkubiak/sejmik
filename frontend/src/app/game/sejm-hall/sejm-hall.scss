@@ -1,0 +1,40 @@
+.hall-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.filter {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--lv-border);
+  border-radius: 999px;
+  background: var(--lv-paper);
+  color: var(--lv-ink);
+
+  &.active {
+    background: var(--lv-crimson-dark);
+    border-color: var(--lv-crimson-dark);
+    color: #fff;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.75rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.empty {
+  color: var(--lv-ink-soft);
+}

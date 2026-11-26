@@ -1,0 +1,77 @@
+:host {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--lv-support-veto);
+  border-radius: var(--lv-radius);
+  background: #fbe9ec;
+  color: var(--lv-support-veto);
+  font-weight: 600;
+}
+
+.turn {
+  display: grid;
+  gap: 1rem;
+}
+
+.turn-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+  }
+
+  .info {
+    margin: 0.25rem 0 0;
+    color: var(--lv-ink-soft);
+  }
+}
+
+.vote-button {
+  font-size: 1.1rem;
+  padding: 0.8rem 1.6rem;
+}
+
+.turn-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 1.25rem;
+  align-items: start;
+
+  lv-bribe-panel {
+    position: sticky;
+    top: 1rem;
+  }
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+
+    lv-bribe-panel {
+      position: static;
+    }
+  }
+}
+
+.game-over {
+  text-align: center;
+
+  .verdict {
+    font-family: var(--lv-font-display);
+    font-size: 1.4rem;
+  }
+
+  a.btn {
+    text-decoration: none;
+  }
+}

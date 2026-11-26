@@ -1,0 +1,24 @@
+<section class="card" aria-labelledby="history-title">
+  <h2 id="history-title">Kronika sejmów</h2>
+  @if (history().length === 0) {
+    <p class="hint">Jeszcze żaden sejm się nie odbył.</p>
+  } @else {
+    <ol class="history">
+      @for (entry of history(); track entry.number) {
+        <li [class.passed]="entry.passed" [class.dissolved]="entry.dissolved">
+          <span class="number">Sejm {{ entry.number }}</span>
+          <span class="title">{{ entry.bill.title }}</span>
+          <span class="outcome">
+            @if (entry.dissolved) {
+              zerwany przez {{ entry.vetoer?.fullName }}
+            } @else if (entry.passed) {
+              przyjęta ({{ entry.votesFor }}:{{ entry.votesAgainst }})
+            } @else {
+              odrzucona ({{ entry.votesFor }}:{{ entry.votesAgainst }})
+            }
+          </span>
+        </li>
+      }
+    </ol>
+  }
+</section>

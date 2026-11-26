@@ -1,9 +1,65 @@
 @if (store.game(); as game) {
-  <h1>Sejm {{ game.sejmNumber }}/{{ game.sejmCount }}</h1>
-  <p>Skarbiec królewski: {{ game.kingBudget }} dukatów</p>
-  <p>Posłów: {{ store.deputies().length }}, ustaw do wyboru: {{ store.bills().length }}</p>
+  <h1 class="visually-hidden">Liberum Veto: sejm {{ game.sejmNumber }}</h1>
+  <lv-game-status [game]="game" [atRisk]="store.atRiskCount()" />
+
+  @if (store.error(); as message) {
+    <div class="alert" role="alert">
+      <span>{{ message }}</span>
+      <button type="button" class="btn btn-secondary" (click)="store.clearError()">Zamknij</button>
+    </div>
+  }
+
+  @if (store.lastResult(); as result) {
+    <lv-vote-result [result]="result" />
+  }
+
+  @if (game.over) {
+    <section class="card game-over" aria-labelledby="over-title">
+      <h2 id="over-title">Koniec gry</h2>
+      <p class="verdict">{{ game.result ? resultLabels[game.result] : '' }}</p>
+      <p>Przyjęte ustawy: {{ game.passedCount }} · zerwane sejmy: {{ game.dissolvedCount }}</p>
+      <a routerLink="/" class="btn">Nowa partia</a>
+    </section>
+  } @else if (!game.selectedBill) {
+    <lv-bill-picker [bills]="store.bills()" [disabled]="store.busy()" (picked)="selectBill($event)" />
+  } @else {
+    <section class="turn">
+      <div class="turn-header card">
+        <div>
+          <h2>Obrady: {{ game.selectedBill.title }}</h2>
+          @if (store.lastBribe(); as info) {
+            <p class="info" role="status">{{ info }}</p>
+          }
+        </div>
+        <button type="button" class="btn vote-button" [disabled]="store.busy()" (click)="vote()">
+          Zarządź głosowanie
+        </button>
+      </div>
+
+      <div class="turn-layout">
+        <lv-sejm-hall [deputies]="store.deputies()" [(selectedId)]="selectedDeputyId" />
+        <lv-bribe-panel
+          [deputy]="selectedDeputy()"
+          [budget]="game.kingBudget"
+          [busy]="store.busy()"
+          (bribe)="bribe($event)"
+        />
+      </div>
+    </section>
+  }
+
+  @if (!game.selectedBill && !game.over && store.deputies().length > 0) {
+    <!-- before a bill is chosen: who sits in the Sejm (support appears after the choice) -->
+    <lv-sejm-hall [deputies]="store.deputies()" [(selectedId)]="selectedDeputyId" />
+  }
+
+  <lv-history-list [history]="store.history()" />
 } @else if (store.error(); as message) {
-  <p role="alert">{{ message }}</p>
+  <section class="card">
+    <h1>Nie udało się wczytać gry</h1>
+    <p role="alert">{{ message }}</p>
+    <a routerLink="/" class="btn">Wróć na start</a>
+  </section>
 } @else {
-  <p>Wczytuję obrady…</p>
+  <p aria-busy="true">Zwołuję posłów…</p>
 }

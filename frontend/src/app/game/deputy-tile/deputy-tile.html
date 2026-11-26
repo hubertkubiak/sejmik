@@ -1,0 +1,26 @@
+<button
+  type="button"
+  class="tile"
+  [class]="'tile level-' + level()"
+  [class.selected]="selected()"
+  [attr.aria-pressed]="selected()"
+  [attr.aria-label]="ariaLabel()"
+  (click)="picked.emit(deputy().id)"
+>
+  <span class="tile-id">#{{ deputy().id }}</span>
+  <span class="tile-name">{{ deputy().name }}</span>
+  <span class="tile-arms">h. {{ deputy().coatOfArms }}</span>
+  <span class="tile-faction faction-{{ deputy().faction.toLowerCase() }}">{{ factionLabel() }}</span>
+
+  @if (deputy().support !== null) {
+    <span class="support-bar" aria-hidden="true">
+      <span class="support-fill" [style.width.%]="deputy().support"></span>
+    </span>
+    <span class="tile-support">
+      <strong>{{ deputy().support }}</strong> · {{ supportLabel() }}
+      @if (deputy().vetoChancePercent) {
+        ({{ deputy().vetoChancePercent }}%)
+      }
+    </span>
+  }
+</button>

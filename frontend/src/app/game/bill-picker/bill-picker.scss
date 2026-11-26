@@ -1,0 +1,56 @@
+.hint {
+  color: var(--lv-ink-soft);
+  margin-top: 0;
+}
+
+.bills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bill {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--lv-border);
+  border-radius: var(--lv-radius);
+  background: #fff;
+
+  h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .btn {
+    margin-top: auto;
+  }
+}
+
+.impact {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .positive dd {
+    color: var(--lv-support-for);
+  }
+
+  .negative dd {
+    color: var(--lv-support-veto);
+  }
+}

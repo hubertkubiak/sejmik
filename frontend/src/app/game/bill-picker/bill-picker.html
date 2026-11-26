@@ -1,0 +1,23 @@
+<section class="card" aria-labelledby="bills-title">
+  <h2 id="bills-title">Wybierz ustawę na ten sejm</h2>
+  <p class="hint">Po wyborze magnaci natychmiast ruszą z sakiewkami.</p>
+
+  <ul class="bills">
+    @for (bill of bills(); track bill.id) {
+      <li class="bill">
+        <h3>{{ bill.title }}</h3>
+        <dl class="impact">
+          @for (faction of factions; track faction) {
+            <div [class.positive]="impact(bill, faction) > 0" [class.negative]="impact(bill, faction) < 0">
+              <dt>{{ factionLabels[faction] }}</dt>
+              <dd>{{ signed(impact(bill, faction)) }}</dd>
+            </div>
+          }
+        </dl>
+        <button type="button" class="btn" [disabled]="disabled()" (click)="picked.emit(bill.id)">
+          Pod obrady
+        </button>
+      </li>
+    }
+  </ul>
+</section>
