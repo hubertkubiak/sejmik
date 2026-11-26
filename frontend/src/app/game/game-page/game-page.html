@@ -1,0 +1,9 @@
+@if (store.game(); as game) {
+  <h1>Sejm {{ game.sejmNumber }}/{{ game.sejmCount }}</h1>
+  <p>Skarbiec królewski: {{ game.kingBudget }} dukatów</p>
+  <p>Posłów: {{ store.deputies().length }}, ustaw do wyboru: {{ store.bills().length }}</p>
+} @else if (store.error(); as message) {
+  <p role="alert">{{ message }}</p>
+} @else {
+  <p>Wczytuję obrady…</p>
+}

@@ -1,0 +1,115 @@
+/* Global design tokens and base styles. Component styles live next to their components. */
+
+:root {
+  --lv-crimson: #9b1b30;
+  --lv-crimson-dark: #5e0f1c;
+  --lv-gold: #c9a227;
+  --lv-parchment: #f6efdf;
+  --lv-paper: #fffaf0;
+  --lv-ink: #2b2118;
+  --lv-ink-soft: #5c4d3c;
+  --lv-border: #d8c9a8;
+
+  /* support colours: text on them keeps WCAG AA contrast */
+  --lv-support-for: #2e6b3a;
+  --lv-support-against: #8a6d1d;
+  --lv-support-veto: #a3192d;
+  --lv-support-none: #6b6256;
+
+  --lv-font-display: 'Georgia', 'Times New Roman', serif;
+  --lv-font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --lv-radius: 10px;
+  --lv-shadow: 0 2px 6px rgb(43 33 24 / 0.12);
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--lv-font-body);
+  color: var(--lv-ink);
+  background: var(--lv-parchment);
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--lv-font-display);
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.2rem;
+  border: 2px solid var(--lv-crimson);
+  border-radius: var(--lv-radius);
+  background: var(--lv-crimson);
+  color: #fff;
+  font-weight: 600;
+  transition: background 0.15s ease, transform 0.1s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--lv-crimson-dark);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &.btn-secondary {
+    background: transparent;
+    color: var(--lv-crimson-dark);
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--lv-gold);
+  outline-offset: 2px;
+}
+
+.card {
+  background: var(--lv-paper);
+  border: 1px solid var(--lv-border);
+  border-radius: var(--lv-radius);
+  box-shadow: var(--lv-shadow);
+  padding: 1.25rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

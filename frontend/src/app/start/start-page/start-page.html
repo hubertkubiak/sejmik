@@ -1,0 +1,27 @@
+<section class="hero card" aria-labelledby="start-title">
+  <h1 id="start-title">Najjaśniejszy Panie, sejm czeka!</h1>
+  <p class="lead">
+    Przeforsuj co najmniej <strong>3 z 5 ustaw</strong>, zanim magnaci zerwą obrady.
+    Jedno <em>liberum veto</em> wystarczy, by sejm się rozszedł.
+  </p>
+
+  <ol class="rules">
+    <li>Wybierz ustawę. Każda inaczej wpływa na stronnictwa: królewskie, magnackie i niezależne.</li>
+    <li>Magnaci od razu przekupują posłów, by zepchnąć ich w strefę veta.</li>
+    <li>Rozdaj własne dukaty: poparcie od 50 to głos ZA, poniżej 15 grozi VETO.</li>
+    <li>Zarządź głosowanie i módl się, by nikt nie krzyknął „Nie pozwalam!”.</li>
+  </ol>
+
+  <div class="actions">
+    <button type="button" class="btn" [disabled]="starting()" (click)="startNewGame()">
+      {{ starting() ? 'Zwołuję sejm…' : 'Nowa gra' }}
+    </button>
+    @if (lastGameId(); as id) {
+      <a class="btn btn-secondary" [routerLink]="['/games', id]">Kontynuuj ostatnią grę</a>
+    }
+  </div>
+
+  @if (error(); as message) {
+    <p class="error" role="alert">{{ message }}</p>
+  }
+</section>

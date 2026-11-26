@@ -1,0 +1,35 @@
+.hero {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.lead {
+  font-size: 1.15rem;
+}
+
+.rules {
+  padding-left: 1.25rem;
+  color: var(--lv-ink-soft);
+
+  li + li {
+    margin-top: 0.35rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+
+  a.btn {
+    text-decoration: none;
+  }
+}
+
+.error {
+  margin-top: 1rem;
+  color: var(--lv-support-veto);
+  font-weight: 600;
+}
