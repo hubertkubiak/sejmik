@@ -2,7 +2,10 @@
 
 Format na wzór [Keep a Changelog](https://keepachangelog.com/pl/1.1.0/). Każdy kamień milowy ze [SPEC.md](SPEC.md) ma swój tag w gicie.
 
-## [Unreleased]
+## [v0.5-api] (M5)
+### Dodane (M5, krok 6)
+- Dokumentacja API: springdoc-openapi 3.2 (Swagger UI pod `/swagger-ui.html`, OpenAPI pod `/v3/api-docs`), `@Tag` i `@Operation` w kontrolerze.
+- CORS dla `http://localhost:4200` (konfigurowalny `liberumveto.cors.allowed-origins`), udostępniony nagłówek `Location`.
 ### Dodane (M5, krok 5)
 - Persystencja: Spring Data JPA + H2 w pliku `./data` (gry przetrwają restart), encje `GameEntity`, `DeputyEntity`, `SejmResultEntity`, mapowanie w `JpaGameRepository`.
 - Optimistic locking (`@Version`) zamiast `synchronized`; konflikt kończy się 409.
